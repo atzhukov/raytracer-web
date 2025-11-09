@@ -1,4 +1,5 @@
 'use client'
+
 import {
 	Empty,
 	EmptyDescription,
@@ -6,43 +7,58 @@ import {
 	EmptyMedia,
 	EmptyTitle,
 } from '@/components/ui/empty'
+import render, {RaytracerInput} from '@/lib/render'
 import {Settings, TriangleAlert} from 'lucide-react'
-import {useEffect, useRef, useState} from 'react'
+import {useEffect, useReducer, useRef} from 'react'
+import progress from './state'
 
-interface CanvasProps {
+type CanvasProps = {
 	width: number
 	height: number
-	rgbaPixels?: Uint8ClampedArray | null
-}
-
-enum CanvasState {
-	Empty,
-	Failed,
-	Rendered,
+	image: RaytracerInput | null
 }
 
 export default function Canvas(props: Readonly<CanvasProps>) {
 	const canvasRef = useRef<HTMLCanvasElement>(null)
 
-	const [error, setError] = useState<string | null>(null)
-	const [canvasState, setCanvasState] = useState(CanvasState.Empty)
+	const [state, transition] = useReducer(progress, {
+		imageData: null,
+		errorMessage: null,
+		state: 'empty',
+	})
 
+	// Re-render the image and set state.imageData when the props change
 	useEffect(() => {
-		if (!props.rgbaPixels) {
-			return
+		async function getImageData() {
+			if (!props.image) {
+				transition({to: 'empty'})
+				return
+			}
+
+			try {
+				const imageData = await render(props.image)
+				transition({to: 'done', imageData})
+			} catch (error) {
+				const message =
+					error instanceof Error
+						? `${error.name}: ${error.message}`
+						: 'Unknown error'
+				transition({to: 'error', message})
+			}
 		}
 
-		if (!canvasRef.current) {
-			setError('could not obtain a reference to the canvas')
-			setCanvasState(CanvasState.Failed)
+		getImageData()
+	}, [props.image, props.width, props.height])
+
+	// Fill canvas when state.imageData changes
+	useEffect(() => {
+		if (!state.imageData || !canvasRef.current) {
 			return
 		}
 
 		const canvas = canvasRef.current
 		const context = canvas.getContext('2d')
 		if (!context) {
-			setError('could not obtain a canvas context')
-			setCanvasState(CanvasState.Failed)
 			return
 		}
 
@@ -51,33 +67,22 @@ export default function Canvas(props: Readonly<CanvasProps>) {
 		canvas.style.width = props.width + 'px'
 		canvas.style.height = props.height + 'px'
 		canvas.width = props.width * ratio
-		canvas.height *= props.height * ratio
+		canvas.height = props.height * ratio
 		context.scale(ratio, ratio)
 
-		try {
-			const imageData = context.createImageData(props.width, props.height)
-			imageData.data.set(props.rgbaPixels)
-			context.putImageData(imageData, 0, 0)
-			setCanvasState(CanvasState.Rendered)
-		} catch (error) {
-			setError(
-				error instanceof Error
-					? `${error.name}: ${error.message}`
-					: 'Unknown error'
-			)
-			setCanvasState(CanvasState.Failed)
-		}
-	}, [])
+		context.putImageData(state.imageData, 0, 0)
+	}, [state.imageData])
 
 	return (
 		<>
 			<canvas
 				ref={canvasRef}
 				style={{
-					display: canvasState == CanvasState.Rendered ? 'block' : 'none',
+					display: state.state == 'done' ? 'block' : 'none',
 				}}
 			/>
-			{canvasState == CanvasState.Failed && (
+
+			{state.state == 'error' && (
 				<Empty>
 					<EmptyHeader>
 						<EmptyMedia variant='icon'>
@@ -86,12 +91,13 @@ export default function Canvas(props: Readonly<CanvasProps>) {
 						<EmptyTitle>An error occurred</EmptyTitle>
 						<EmptyDescription>
 							<p>Your scene could not be rendered</p>
-							<p>{error}</p>
+							<p>{state.errorMessage}</p>
 						</EmptyDescription>
 					</EmptyHeader>
 				</Empty>
 			)}
-			{canvasState == CanvasState.Empty && (
+
+			{state.state == 'empty' && (
 				<Empty>
 					<EmptyHeader>
 						<EmptyMedia variant='icon'>
