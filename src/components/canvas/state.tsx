@@ -4,15 +4,20 @@
 type State = {
 	imageData: ImageData | null
 	errorMessage: string | null
-	state: 'empty' | 'error' | 'done'
+	state: 'empty' | 'working' | 'error' | 'done'
 }
 
 /**
  * A transition that represents a state change.
  */
-type Transition = EmptyTransition | ErrorTransition | DoneTransition
+type Transition =
+	| EmptyTransition
+	| WorkingTransition
+	| ErrorTransition
+	| DoneTransition
 
 type EmptyTransition = {to: 'empty'}
+type WorkingTransition = {to: 'working'}
 type ErrorTransition = {to: 'error'; message: string}
 type DoneTransition = {to: 'done'; imageData: ImageData}
 
@@ -30,6 +35,12 @@ export default function progress(state: State, transition: Transition): State {
 			imageData: null,
 			errorMessage: null,
 			state: 'empty',
+		}
+	} else if (transitionIsWorking(transition)) {
+		return {
+			imageData: state.imageData,
+			errorMessage: null,
+			state: 'working',
 		}
 	} else if (transitionIsError(transition)) {
 		return {
@@ -54,6 +65,12 @@ function transitionIsEmpty(
 	transition: Transition
 ): transition is EmptyTransition {
 	return transition.to == 'empty'
+}
+
+function transitionIsWorking(
+	transition: Transition
+): transition is WorkingTransition {
+	return transition.to == 'working'
 }
 
 function transitionIsError(

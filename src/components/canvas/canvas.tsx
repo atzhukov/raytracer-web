@@ -8,8 +8,8 @@ import {
 	EmptyTitle,
 } from '@/components/ui/empty'
 import render, {RaytracerInput} from '@/lib/render'
-import {Settings, TriangleAlert} from 'lucide-react'
-import {useEffect, useReducer, useRef} from 'react'
+import {Loader, Settings, TriangleAlert} from 'lucide-react'
+import {JSX, useEffect, useReducer, useRef} from 'react'
 import progress from './state'
 
 type CanvasProps = {
@@ -34,43 +34,43 @@ export default function Canvas(props: Readonly<CanvasProps>) {
 				transition({to: 'empty'})
 				return
 			}
-
 			try {
+				transition({to: 'working'})
 				const imageData = await render(props.image)
 				transition({to: 'done', imageData})
 			} catch (error) {
-				const message =
-					error instanceof Error
-						? `${error.name}: ${error.message}`
-						: 'Unknown error'
-				transition({to: 'error', message})
+				transition({to: 'error', message: errorMessage(error)})
 			}
 		}
-
 		getImageData()
 	}, [props.image, props.width, props.height])
 
 	// Fill canvas when state.imageData changes
 	useEffect(() => {
-		if (!state.imageData || !canvasRef.current) {
+		if (!state.imageData) {
+			return
+		}
+		if (!canvasRef.current) {
+			transition({to: 'error', message: 'Could not retrieve a canvas ref'})
 			return
 		}
 
 		const canvas = canvasRef.current
-		const context = canvas.getContext('2d')
-		if (!context) {
-			return
-		}
+		const context = canvas.getContext('2d')!
 
-		// Adjust for retina displays
+		// Scale for retina displays
 		const ratio = window.devicePixelRatio || 1
 		canvas.style.width = props.width + 'px'
 		canvas.style.height = props.height + 'px'
 		canvas.width = props.width * ratio
 		canvas.height = props.height * ratio
-		context.scale(ratio, ratio)
 
-		context.putImageData(state.imageData, 0, 0)
+		try {
+			context.scale(ratio, ratio)
+			context.putImageData(state.imageData, 0, 0)
+		} catch (error) {
+			transition({to: 'error', message: errorMessage(error)})
+		}
 	}, [state.imageData])
 
 	return (
@@ -82,32 +82,59 @@ export default function Canvas(props: Readonly<CanvasProps>) {
 				}}
 			/>
 
-			{state.state == 'error' && (
-				<Empty>
-					<EmptyHeader>
-						<EmptyMedia variant='icon'>
-							<TriangleAlert />
-						</EmptyMedia>
-						<EmptyTitle>An error occurred</EmptyTitle>
-						<EmptyDescription>
-							<p>Your scene could not be rendered</p>
-							<p>{state.errorMessage}</p>
-						</EmptyDescription>
-					</EmptyHeader>
-				</Empty>
-			)}
+			{state.state == 'working' &&
+				empty(<Loader className='animate-spin' />, 'Rendering...', <></>)}
 
-			{state.state == 'empty' && (
-				<Empty>
-					<EmptyHeader>
-						<EmptyMedia variant='icon'>
-							<Settings />
-						</EmptyMedia>
-						<EmptyTitle>Nothing to Render</EmptyTitle>
-						<EmptyDescription>Configure the camera and scene</EmptyDescription>
-					</EmptyHeader>
-				</Empty>
-			)}
+			{state.state == 'error' &&
+				empty(
+					<TriangleAlert />,
+					'An error occurred',
+					<div>
+						<p>Your scene could not be rendered</p>
+						<p>{state.errorMessage}</p>
+					</div>
+				)}
+
+			{state.state == 'empty' &&
+				empty(
+					<Settings />,
+					'Nothing to Render',
+					<>Configure the camera and scene</>
+				)}
 		</>
 	)
+}
+
+/**
+ * Constructs the empty element (https://ui.shadcn.com/docs/components/empty).
+ * @param icon the icon displayed at the top.
+ * @param title the string displayed under the icon.
+ * @param description the string providing more details under the title.
+ * @returns the JSX element containing the empty element.
+ */
+function empty(
+	icon: JSX.Element,
+	title: string,
+	description: JSX.Element
+): JSX.Element {
+	return (
+		<Empty>
+			<EmptyHeader>
+				<EmptyMedia variant='icon'>{icon}</EmptyMedia>
+				<EmptyTitle>{title}</EmptyTitle>
+				<EmptyDescription>{description}</EmptyDescription>
+			</EmptyHeader>
+		</Empty>
+	)
+}
+
+/**
+ * Constructs an error message from a caught error object.
+ * @param error a caught error object.
+ * @returns a string containing the error message.
+ */
+function errorMessage(error: unknown): string {
+	return error instanceof Error
+		? `${error.name}: ${error.message}`
+		: 'Unknown error'
 }
