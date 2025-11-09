@@ -1,3 +1,9 @@
+import Canvas from '@/components/canvas'
+
 export default function Home() {
-	return <p>contents</p>
+	return (
+		<div>
+			<Canvas width={300} height={500} />
+		</div>
+	)
 }
