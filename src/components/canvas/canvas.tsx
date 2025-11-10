@@ -36,7 +36,7 @@ export default function Canvas(props: Readonly<CanvasProps>) {
 			}
 			try {
 				transition({to: 'working'})
-				const imageData = await render(props.image)
+				const imageData = await render(props.image, props.width, props.height)
 				transition({to: 'done', imageData})
 			} catch (error) {
 				transition({to: 'error', message: errorMessage(error)})

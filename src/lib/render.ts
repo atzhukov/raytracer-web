@@ -1,5 +1,9 @@
 'use client'
 
+import * as raytracer from '@/../pkg/raytracer.js'
+
+let initialised = false
+
 /**
  * The input type for the WASM raytracer module.
  */
@@ -61,13 +65,17 @@ type Vec3 = [number, number, number]
  * @returns a promise containing the image data.
  */
 export default async function render(
-	input: RaytracerInput
+	input: RaytracerInput,
+	width: number,
+	height: number
 ): Promise<ImageData> {
-	const raytracer = await import('@/../pkg/raytracer.js')
-	await raytracer.default()
+	if (!initialised) {
+		await raytracer.default()
+		initialised = true
+	}
 
-	const pixels = raytracer.render(input)
+	const pixels = raytracer.render(input, width, height)
 	const imageDataArray = new Uint8ClampedArray(pixels)
 
-	return new ImageData(imageDataArray, 600, 300)
+	return new ImageData(imageDataArray, width, height)
 }
