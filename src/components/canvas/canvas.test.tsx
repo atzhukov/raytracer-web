@@ -1,9 +1,8 @@
-import {expect, describe, it, vi} from 'vitest'
+import {expect, describe, it, vi, beforeEach} from 'vitest'
 import {render as brender} from 'vitest-browser-react'
 import Canvas from '@/components/canvas/canvas'
 import {page} from 'vitest/browser'
 import render, {RaytracerInput} from '@/lib/render'
-import {beforeEach} from 'node:test'
 
 vi.mock(import('@/lib/render'), () => {
 	return {
