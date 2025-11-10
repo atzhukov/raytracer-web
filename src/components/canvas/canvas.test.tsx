@@ -1,5 +1,5 @@
 import {expect, describe, it, vi, beforeEach} from 'vitest'
-import {render as brender} from 'vitest-browser-react'
+import {render as browserRender} from 'vitest-browser-react'
 import Canvas from '@/components/canvas/canvas'
 import {page} from 'vitest/browser'
 import render, {RaytracerInput} from '@/lib/render'
@@ -31,7 +31,7 @@ describe('canvas', () => {
 	beforeEach(() => vi.clearAllMocks())
 
 	it('should display empty placeholder if no image is specified', async () => {
-		const result = await brender(
+		const result = await browserRender(
 			<Canvas width={100} height={50} image={null} />
 		)
 		const screen = page.elementLocator(result.baseElement)
@@ -46,7 +46,7 @@ describe('canvas', () => {
 		const mockRender = vi.mocked(render)
 		mockRender.mockRejectedValue(new Error(errorMessage))
 
-		const result = await brender(
+		const result = await browserRender(
 			<Canvas width={100} height={50} image={testImage} />
 		)
 		const screen = page.elementLocator(result.baseElement)
@@ -63,7 +63,7 @@ describe('canvas', () => {
 		const mockRender = vi.mocked(render)
 		mockRender.mockResolvedValue(new ImageData(1, 1))
 
-		const result = await brender(
+		const result = await browserRender(
 			<Canvas width={100} height={50} image={testImage} />
 		)
 		const screen = page.elementLocator(result.baseElement)
