@@ -12,11 +12,11 @@ export type RaytracerInput = {
  * The camera configuration.
  */
 type CameraSpec = {
-	fov: number
-	source: Vec3
-	target: Vec3
-	aperture: number
-	focusDistance: number
+	fov?: number
+	source?: Vec3
+	target?: Vec3
+	aperture?: number
+	focusDistance?: number
 }
 
 /**
@@ -28,7 +28,7 @@ type SceneObject = {
 	center: Vec3
 	radius: number
 } & {
-	label: string
+	label?: string
 	material: Material
 }
 

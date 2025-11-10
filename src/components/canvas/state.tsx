@@ -1,7 +1,7 @@
 /**
  * The state of the canvas component.
  */
-type State = {
+export type State = {
 	imageData: ImageData | null
 	errorMessage: string | null
 	state: 'empty' | 'working' | 'error' | 'done'
@@ -44,7 +44,7 @@ export default function progress(state: State, transition: Transition): State {
 		}
 	} else if (transitionIsError(transition)) {
 		return {
-			imageData: null,
+			imageData: state.imageData,
 			errorMessage: transition.message,
 			state: 'error',
 		}

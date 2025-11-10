@@ -71,11 +71,13 @@ export default function Canvas(props: Readonly<CanvasProps>) {
 		} catch (error) {
 			transition({to: 'error', message: errorMessage(error)})
 		}
-	}, [state.imageData])
+	}, [state.imageData, props.width, props.height])
 
 	return (
 		<>
-			<canvas
+			<canvas // NOSONAR - ts:S6819 - this canvas is non-interactive
+				role='img' // NOSONAR - ts:S6843 - this canvas is non-interactive
+				aria-label='Image produced by the ray tracer'
 				ref={canvasRef}
 				style={{
 					display: state.state == 'done' ? 'block' : 'none',
@@ -121,8 +123,12 @@ function empty(
 		<Empty>
 			<EmptyHeader>
 				<EmptyMedia variant='icon'>{icon}</EmptyMedia>
-				<EmptyTitle>{title}</EmptyTitle>
-				<EmptyDescription>{description}</EmptyDescription>
+				<EmptyTitle role='status' aria-label='Current status'>
+					{title}
+				</EmptyTitle>
+				<EmptyDescription role='log' aria-label='Additional information'>
+					{description}
+				</EmptyDescription>
 			</EmptyHeader>
 		</Empty>
 	)
