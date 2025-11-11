@@ -15,46 +15,67 @@ import {
 	FieldSet,
 } from '@/components/ui/field'
 import {Button} from '../ui/button'
-import {Play} from 'lucide-react'
+import {Play, RefreshCw, Scan} from 'lucide-react'
 import {useConfigurationStore} from '@/lib/store'
+import {useReducer, useState} from 'react'
 import {useDebouncedCallback} from 'use-debounce'
 import {CameraSpec} from '@/lib/render/render'
-import {useReducer} from 'react'
+import {Switch} from '../ui/switch'
+import {Label} from '../ui/label'
+import {Separator} from '../ui/separator'
 
 export default function Form() {
-	const configStore = useConfigurationStore()
+	const initialCamera = useConfigurationStore.getState().cameraSpec
+	const updateCamera = useConfigurationStore((state) => state.setCameraSpec)
 
-	const debounce = useDebouncedCallback(() => {
-		configStore.setCameraSpec(cameraSpec)
-	}, 500)
+	const [live, setLive] = useState(true)
 
-	const [cameraSpec, updateCameraSpec] = useReducer(
-		(state: CameraSpec, change: Partial<CameraSpec>) => {
-			const updated = {...state, ...change}
-			debounce()
-			return updated
-		},
-		configStore.cameraSpec
+	// Keep a local camera spec object and debounce changes to the configuration store,
+	// so that the UI updates immediately but ray tracing only starts after a delay
+	const updateGlobalCameraDebounced = useDebouncedCallback(
+		(newState: CameraSpec) => updateCamera(newState),
+		500
 	)
+	const [localCamera, update] = useReducer(
+		(state: CameraSpec, changes: Partial<CameraSpec>) => {
+			const newState: CameraSpec = {...state, ...changes}
+			if (live) {
+				updateGlobalCameraDebounced(newState)
+			}
+			return newState
+		},
+		initialCamera
+	)
+
+	const commit = (event: React.SyntheticEvent) => {
+		event.preventDefault()
+		updateCamera(localCamera)
+	}
 
 	const cameraSettings = (
 		<FieldSet>
 			<FieldGroup>
 				<Field>
-					<FieldLabel htmlFor='fov'>Field of View</FieldLabel>
+					<FieldLabel className='flex items-center' htmlFor='fov'>
+						<Scan className='w-[1em] mb-0.5' />
+						Field of View
+					</FieldLabel>
 					<div className='flex gap-2 align-center items-center'>
 						<Slider
 							id='fov'
-							value={[configStore.cameraSpec.fov]}
-							onValueChange={(v) => updateCameraSpec({fov: v[0]})}
+							value={[localCamera.fov]}
+							onValueChange={(v) => update({fov: v[0]})}
 							min={0}
 							max={100}
 							step={1}
 							aria-label='Field of View'
+							role='slider'
 						/>
-						<span>{configStore.cameraSpec.fov}&deg;</span>
+						<span>{localCamera.fov}&deg;</span>
 					</div>
-					<FieldDescription>Describes the field of view</FieldDescription>
+					<FieldDescription>
+						Describes the vertical angle visible in the rendered image.
+					</FieldDescription>
 				</Field>
 			</FieldGroup>
 		</FieldSet>
@@ -75,8 +96,22 @@ export default function Form() {
 					</AccordionContent>
 				</AccordionItem>
 			</Accordion>
-			<div className='flex justify-end'>
-				<Button variant='outline' size='sm'>
+			<Separator className='mb-4' />
+			<div className='flex justify-between'>
+				<div className='flex items-center gap-2'>
+					<Switch
+						id='live'
+						checked={live}
+						onCheckedChange={setLive}
+						aria-label='Start ray tracing immediately'
+						role='switch'
+					/>
+					<Label htmlFor='live' className='flex items-center gap-1.5 mt-0.5'>
+						<RefreshCw className='w-[1em] mb-0.5' />
+						Live
+					</Label>
+				</div>
+				<Button variant='outline' size='sm' onClick={(e) => commit(e)}>
 					<Play /> Render
 				</Button>
 			</div>
