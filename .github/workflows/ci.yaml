@@ -21,5 +21,11 @@ jobs:
           cache: 'pnpm'
       - run: pnpm install
       - run: pnpm lint --max-warnings=0
-      - run: pnpm run build --no-lint
+      - name: (rust) Add wasm32 target
+        run: rustup target add wasm32-unknown-unknown
+      - name: (rust) Install wasm-pack
+        run: cargo install wasm-pack
+      - name: (rust) Compile to wasm
+        run: pnpm build:rt:rs
+      - run: pnpm build --no-lint
       - run: pnpm test run
