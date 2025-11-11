@@ -15,12 +15,12 @@ export type RaytracerInput = {
 /**
  * The camera configuration.
  */
-type CameraSpec = {
-	fov?: number
-	source?: Vec3
-	target?: Vec3
-	aperture?: number
-	focusDistance?: number
+export type CameraSpec = {
+	fov: number
+	source: Vec3
+	target: Vec3
+	aperture: number
+	focusDistance: number
 }
 
 /**

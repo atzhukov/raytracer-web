@@ -11,6 +11,8 @@ import render, {RaytracerInput} from '@/lib/render'
 import {Loader, Settings, TriangleAlert} from 'lucide-react'
 import {JSX, useEffect, useReducer, useRef} from 'react'
 import progress from './state'
+import {useGlobalStore} from '@/lib/store'
+import {github} from '@/lib/demo'
 
 type CanvasProps = {
 	width: number
@@ -19,6 +21,7 @@ type CanvasProps = {
 }
 
 export default function Canvas(props: Readonly<CanvasProps>) {
+	const globalStore = useGlobalStore()
 	const canvasRef = useRef<HTMLCanvasElement>(null)
 
 	const [state, transition] = useReducer(progress, {
@@ -30,20 +33,28 @@ export default function Canvas(props: Readonly<CanvasProps>) {
 	// Re-render the image and set state.imageData when the props change
 	useEffect(() => {
 		async function getImageData() {
-			if (!props.image) {
+			if (!globalStore.cameraSpec) {
 				transition({to: 'empty'})
 				return
 			}
 			try {
 				transition({to: 'working'})
-				const imageData = await render(props.image, props.width, props.height)
+				const input = github
+				input.camera = globalStore.cameraSpec
+
+				const ratio = window.devicePixelRatio || 1
+				const imageData = await render(
+					input,
+					props.width * ratio,
+					props.height * ratio
+				)
 				transition({to: 'done', imageData})
 			} catch (error) {
 				transition({to: 'error', message: errorMessage(error)})
 			}
 		}
 		getImageData()
-	}, [props.image, props.width, props.height])
+	}, [globalStore.cameraSpec, props.width, props.height])
 
 	// Fill canvas when state.imageData changes
 	useEffect(() => {
