@@ -34,5 +34,5 @@ jobs:
         run: pnpm build --no-lint
       - name: Run tests
         run: |
-          pnpm exec playwright install
+          pnpm exec playwright install --with-deps
           pnpm test run
