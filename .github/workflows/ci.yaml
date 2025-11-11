@@ -11,7 +11,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v5
+      - name: Checkout repository
+        uses: actions/checkout@v5
         with:
           submodules: true
       - name: Install pnpm
@@ -21,11 +22,17 @@ jobs:
         with:
           node-version: 22
           cache: 'pnpm'
-      - run: pnpm install
-      - run: pnpm lint --max-warnings=0
-      - name: (rust) Add wasm32 target
-        run: rustup target add wasm32-unknown-unknown
-      - name: (rust) Compile to wasm
-        run: pnpm build:rt:wasm
-      - run: pnpm build --no-lint
-      - run: pnpm test run
+      - name: Install dependencies
+        run: pnpm install
+      - name: Lint
+        run: pnpm lint --max-warnings=0
+      - name: (rust) Compile ray tracer
+        run: |
+          rustup target add wasm32-unknown-unknown  
+          pnpm build:rt:wasm
+      - name: Build Next.js project
+        run: pnpm build --no-lint
+      - name: Run tests
+        run: |
+          pnpm exec playwright install
+          pnpm test run
