@@ -1,0 +1,16 @@
+#!/bin/sh
+
+if ! which cargo &> /dev/null; then
+	echo 'cargo is not installed.'
+	echo 'to install, see: https://rust-lang.org/tools/install/'
+	exit
+fi
+
+if ! which wasm-pack &> /dev/null; then
+	echo 'wasm-pack is not installed.'
+	echo 'to install, run: cargo install wasm-pack'
+	exit
+fi
+
+cd raytracer
+wasm-pack build --target=web --no-opt --release --out-dir=../pkg
