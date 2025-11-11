@@ -6,7 +6,7 @@
 	"scripts": {
 		"dev": "next dev --turbopack",
 		"build": "next build --turbopack",
-		"build:rt:wasm": "./scripts/rt-wasm-build",
+		"build:rt:wasm": "wasm-pack build ./raytracer --target=web --no-opt --release --out-dir=../pkg",
 		"start": "next start",
 		"lint": "eslint",
 		"test": "vitest"
@@ -41,6 +41,7 @@
 		"typescript": "^5",
 		"vite-tsconfig-paths": "^5.1.4",
 		"vitest": "^4.0.8",
-		"vitest-browser-react": "^2.0.2"
+		"vitest-browser-react": "^2.0.2",
+		"wasm-pack": "^0.13.1"
 	}
 }
