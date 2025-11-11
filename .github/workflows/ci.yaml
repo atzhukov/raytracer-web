@@ -1,0 +1,46 @@
+name: Build & Test
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: ['**']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          submodules: true
+      - name: Cache Next.js builds
+        uses: actions/cache@v4
+        id: next-cache
+        with:
+          path: ${{ github.workspace }}/.next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
+          restore-keys: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+      - name: Use Node.js 22
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: 'pnpm'
+          cache-dependency-path: 'pnpm-lock.yaml'
+      - name: Install dependencies
+        run: pnpm install
+      - name: Lint
+        run: pnpm lint --max-warnings=0
+      - name: (rust) Compile ray tracer
+        run: |
+          rustup target add wasm32-unknown-unknown  
+          pnpm build:rt:wasm
+      - name: Build Next.js project
+        run: pnpm build --no-lint
+      - name: Run tests
+        run: |
+          pnpm exec playwright install --with-deps
+          pnpm test run

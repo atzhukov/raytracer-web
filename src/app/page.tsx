@@ -1,3 +1,10 @@
+import Canvas from '@/components/canvas/canvas'
+import {github} from '@/lib/demo'
+
 export default function Home() {
-	return <p>contents</p>
+	return (
+		<div>
+			<Canvas width={600} height={300} image={github} />
+		</div>
+	)
 }

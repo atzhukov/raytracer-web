@@ -29,7 +29,7 @@ export default function RootLayout({
 					<header className='flex justify-center bg-amber-800 rounded-lg'>
 						{info.header}
 					</header>
-					<main className='h-auto'>{children}</main>
+					<main>{children}</main>
 					<footer className='flex justify-center bg-amber-800 rounded-lg'>
 						{info.footer}
 					</footer>
