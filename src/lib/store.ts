@@ -1,18 +1,25 @@
 import {create} from 'zustand'
-import {CameraSpec} from '@/lib/render'
+import {CameraSpec, SceneObject} from '@/lib/render/render'
 import {github} from './demo'
 
 interface GlobalStore {
-	// input: RaytracerInput | null
 	cameraSpec: CameraSpec
-	// setInput: (newInput: RaytracerInput) => void
+	scene: SceneObject[]
 	setCameraSpec: (spec: Partial<CameraSpec>) => void
-	// updateCamera: (camera: Partial<CameraSpec>) => void
+	addSceneObject: (object: SceneObject) => void
 }
 
 export const useGlobalStore = create<GlobalStore>((set) => ({
-	// input: github,
 	cameraSpec: github.camera,
+	scene: [],
 	setCameraSpec: (spec) =>
-		set((state) => ({cameraSpec: {...state.cameraSpec, ...spec}})),
+		set((state) => ({
+			cameraSpec: {...state.cameraSpec, ...spec},
+			scene: state.scene,
+		})),
+	addSceneObject: (object) =>
+		set((state) => ({
+			cameraSpec: state.cameraSpec,
+			scene: [...state.scene, object],
+		})),
 }))

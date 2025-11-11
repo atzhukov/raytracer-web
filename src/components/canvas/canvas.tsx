@@ -7,7 +7,7 @@ import {
 	EmptyMedia,
 	EmptyTitle,
 } from '@/components/ui/empty'
-import render from '@/lib/render'
+import render, {RaytracerInput} from '@/lib/render/render'
 import {Loader, Settings, TriangleAlert} from 'lucide-react'
 import {JSX, useEffect, useReducer, useRef} from 'react'
 import progress from './state'
@@ -32,15 +32,17 @@ export default function Canvas(props: Readonly<CanvasProps>) {
 	// Re-render the image and set state.imageData when the props change
 	useEffect(() => {
 		async function getImageData() {
-			if (!globalStore.cameraSpec) {
+			if (globalStore.scene.length == 0) {
 				transition({to: 'empty'})
 				return
 			}
+
 			try {
 				transition({to: 'working'})
-				const input = github
-				input.camera = globalStore.cameraSpec
-
+				const input: RaytracerInput = {
+					camera: globalStore.cameraSpec,
+					scene: globalStore.scene,
+				}
 				const ratio = window.devicePixelRatio || 1
 				const imageData = await render(
 					input,
@@ -53,7 +55,7 @@ export default function Canvas(props: Readonly<CanvasProps>) {
 			}
 		}
 		getImageData()
-	}, [globalStore.cameraSpec, props.width, props.height])
+	}, [globalStore.cameraSpec, globalStore.scene, props.width, props.height])
 
 	// Fill canvas when state.imageData changes
 	useEffect(() => {

@@ -18,7 +18,7 @@ import {Button} from '../ui/button'
 import {Play} from 'lucide-react'
 import {useGlobalStore} from '@/lib/store'
 import {useDebouncedCallback} from 'use-debounce'
-import {CameraSpec} from '@/lib/render'
+import {CameraSpec} from '@/lib/render/render'
 import {useReducer} from 'react'
 
 export default function Form() {

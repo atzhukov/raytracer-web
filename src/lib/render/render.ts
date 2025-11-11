@@ -1,6 +1,6 @@
 'use client'
 
-import {RequestMessage, ResponseMessage} from './render/worker'
+import {RequestMessage, ResponseMessage} from './worker'
 
 /**
  * The input type for the WASM raytracer module.
@@ -25,7 +25,7 @@ export type CameraSpec = {
  * An object of a scene.
  * At the moment, only spheres are supported.
  */
-type SceneObject = {
+export type SceneObject = {
 	type: 'sphere'
 	center: Vec3
 	radius: number
@@ -68,7 +68,7 @@ export default async function render(
 	height: number
 ): Promise<ImageData> {
 	return new Promise((resolve, reject) => {
-		const worker = new Worker(new URL('./render/worker.ts', import.meta.url))
+		const worker = new Worker(new URL('./worker.ts', import.meta.url))
 
 		worker.onmessage = (event: MessageEvent<ResponseMessage>) => {
 			if (event.data.tag == 'success') {

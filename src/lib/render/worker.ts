@@ -1,4 +1,4 @@
-import {RaytracerInput} from '../render'
+import {RaytracerInput} from './render'
 
 export type RequestMessage = {
 	input: RaytracerInput

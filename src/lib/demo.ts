@@ -1,4 +1,4 @@
-import {RaytracerInput} from '@/lib/render'
+import {RaytracerInput} from '@/lib/render/render'
 
 export const github = {
 	camera: {
