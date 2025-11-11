@@ -26,6 +26,6 @@ jobs:
       - name: (rust) Install wasm-pack
         run: cargo install wasm-pack
       - name: (rust) Compile to wasm
-        run: pnpm build:rt:rs
+        run: pnpm build:rt:wasm
       - run: pnpm build --no-lint
       - run: pnpm test run
