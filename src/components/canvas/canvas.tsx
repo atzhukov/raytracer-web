@@ -7,7 +7,7 @@ import {
 	EmptyMedia,
 	EmptyTitle,
 } from '@/components/ui/empty'
-import render, {RaytracerInput} from '@/lib/render'
+import render from '@/lib/render'
 import {Loader, Settings, TriangleAlert} from 'lucide-react'
 import {JSX, useEffect, useReducer, useRef} from 'react'
 import progress from './state'
@@ -17,7 +17,6 @@ import {github} from '@/lib/demo'
 type CanvasProps = {
 	width: number
 	height: number
-	image: RaytracerInput | null
 }
 
 export default function Canvas(props: Readonly<CanvasProps>) {

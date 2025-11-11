@@ -9,7 +9,7 @@ export default function Home() {
 			</div>
 			<div className='w-[100%] h-[100%] flex-1'>
 				<div className='grid place-items-center'>
-					<Canvas width={600} height={300} image={null} />
+					<Canvas width={300} height={150} />
 				</div>
 			</div>
 		</div>

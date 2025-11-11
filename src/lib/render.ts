@@ -1,8 +1,6 @@
 'use client'
 
-import * as raytracer from '@/../pkg/raytracer.js'
-
-let initialised = false
+import {RequestMessage, ResponseMessage} from './render/worker'
 
 /**
  * The input type for the WASM raytracer module.
@@ -69,13 +67,19 @@ export default async function render(
 	width: number,
 	height: number
 ): Promise<ImageData> {
-	if (!initialised) {
-		await raytracer.default()
-		initialised = true
-	}
+	return new Promise((resolve, reject) => {
+		const worker = new Worker(new URL('./render/worker.ts', import.meta.url))
 
-	const pixels = raytracer.render(input, width, height)
-	const imageDataArray = new Uint8ClampedArray(pixels)
+		worker.onmessage = (event: MessageEvent<ResponseMessage>) => {
+			if (event.data.tag == 'success') {
+				const pixels = event.data.pixels as ImageDataArray
+				let imageData = new ImageData(pixels, width, height)
+				resolve(imageData)
+			} else if (event.data.tag == 'error') {
+				reject(new Error(event.data.message))
+			}
+		}
 
-	return new ImageData(imageDataArray, width, height)
+		worker.postMessage({input, width, height} satisfies RequestMessage)
+	})
 }
