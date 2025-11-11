@@ -12,13 +12,7 @@ Then you will need to add the `wasm32-unknown-unknown` target:
 $ rustup target add wasm32-unknown-unknown
 ```
 
-and install [wasm-pack](https://github.com/drager/wasm-pack) (this will install it globally):
-
-```sh
-$ cargo install wasm-pack
-```
-
-Finally you can compile the WebAssembly binary with:
+Then you can compile the WebAssembly binary with:
 
 ```sh
 $ pnpm build:rt:wasm
