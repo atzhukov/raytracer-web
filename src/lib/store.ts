@@ -2,14 +2,14 @@ import {create} from 'zustand'
 import {CameraSpec, SceneObject} from '@/lib/render/render'
 import {github} from './demo'
 
-interface GlobalStore {
+interface ConfigurationStore {
 	cameraSpec: CameraSpec
 	scene: SceneObject[]
 	setCameraSpec: (spec: Partial<CameraSpec>) => void
 	addSceneObject: (object: SceneObject) => void
 }
 
-export const useGlobalStore = create<GlobalStore>((set) => ({
+export const useConfigurationStore = create<ConfigurationStore>((set) => ({
 	cameraSpec: github.camera,
 	scene: [],
 	setCameraSpec: (spec) =>

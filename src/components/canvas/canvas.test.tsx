@@ -3,7 +3,7 @@ import {render as browserRender} from 'vitest-browser-react'
 import Canvas from '@/components/canvas/canvas'
 import {page} from 'vitest/browser'
 import render, {CameraSpec, SceneObject} from '@/lib/render/render'
-import {useGlobalStore} from '@/lib/store'
+import {useConfigurationStore} from '@/lib/store'
 
 vi.mock(import('@/lib/render/render'), () => {
 	return {
@@ -33,7 +33,7 @@ const sphere: SceneObject = {
 
 describe('canvas', () => {
 	beforeEach(() => {
-		useGlobalStore.setState({
+		useConfigurationStore.setState({
 			cameraSpec: cameraSpec,
 			scene: [],
 		})
@@ -54,7 +54,7 @@ describe('canvas', () => {
 		const mockRender = vi.mocked(render)
 		mockRender.mockRejectedValue(new Error(errorMessage))
 
-		const state = useGlobalStore.getState()
+		const state = useConfigurationStore.getState()
 		state.addSceneObject(sphere)
 
 		const result = await browserRender(<Canvas width={100} height={50} />)
@@ -72,7 +72,7 @@ describe('canvas', () => {
 		const mockRender = vi.mocked(render)
 		mockRender.mockResolvedValue(new ImageData(1, 1))
 
-		const state = useGlobalStore.getState()
+		const state = useConfigurationStore.getState()
 		state.addSceneObject(sphere)
 
 		const result = await browserRender(<Canvas width={100} height={50} />)

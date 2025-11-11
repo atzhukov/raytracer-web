@@ -16,16 +16,16 @@ import {
 } from '@/components/ui/field'
 import {Button} from '../ui/button'
 import {Play} from 'lucide-react'
-import {useGlobalStore} from '@/lib/store'
+import {useConfigurationStore} from '@/lib/store'
 import {useDebouncedCallback} from 'use-debounce'
 import {CameraSpec} from '@/lib/render/render'
 import {useReducer} from 'react'
 
 export default function Form() {
-	const globalStore = useGlobalStore()
+	const configStore = useConfigurationStore()
 
 	const debounce = useDebouncedCallback(() => {
-		globalStore.setCameraSpec(cameraSpec)
+		configStore.setCameraSpec(cameraSpec)
 	}, 500)
 
 	const [cameraSpec, updateCameraSpec] = useReducer(
@@ -34,7 +34,7 @@ export default function Form() {
 			debounce()
 			return updated
 		},
-		globalStore.cameraSpec
+		configStore.cameraSpec
 	)
 
 	const cameraSettings = (
@@ -45,14 +45,14 @@ export default function Form() {
 					<div className='flex gap-2 align-center items-center'>
 						<Slider
 							id='fov'
-							value={[globalStore.cameraSpec.fov]}
+							value={[configStore.cameraSpec.fov]}
 							onValueChange={(v) => updateCameraSpec({fov: v[0]})}
 							min={0}
 							max={100}
 							step={1}
 							aria-label='Field of View'
 						/>
-						<span>{globalStore.cameraSpec.fov}&deg;</span>
+						<span>{configStore.cameraSpec.fov}&deg;</span>
 					</div>
 					<FieldDescription>Describes the field of view</FieldDescription>
 				</Field>
