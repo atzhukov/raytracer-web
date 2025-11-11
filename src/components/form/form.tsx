@@ -15,7 +15,7 @@ import {
 	FieldSet,
 } from '@/components/ui/field'
 import {Button} from '../ui/button'
-import {Play, RefreshCw, Scan} from 'lucide-react'
+import {Camera, ImageIcon, Play, RefreshCw, Scan} from 'lucide-react'
 import {useConfigurationStore} from '@/lib/store'
 import {useReducer, useState} from 'react'
 import {useDebouncedCallback} from 'use-debounce'
@@ -56,8 +56,8 @@ export default function Form() {
 		<FieldSet>
 			<FieldGroup>
 				<Field>
-					<FieldLabel className='flex items-center' htmlFor='fov'>
-						<Scan className='w-[1em] mb-0.1' />
+					<FieldLabel className='flex items-center gap-2' htmlFor='fov'>
+						<Scan size='16' className='mb-0.1' />
 						Field of View
 					</FieldLabel>
 					<div className='flex gap-2 align-center items-center'>
@@ -85,12 +85,16 @@ export default function Form() {
 		<form>
 			<Accordion type='single' defaultValue='camera-settings' collapsible>
 				<AccordionItem value='camera-settings'>
-					<AccordionTrigger>Camera Settings</AccordionTrigger>
+					<AccordionTrigger icon={<Camera size={16} />}>
+						Camera Settings
+					</AccordionTrigger>
 					<AccordionContent>{cameraSettings}</AccordionContent>
 				</AccordionItem>
 
 				<AccordionItem value='scene'>
-					<AccordionTrigger>Scene</AccordionTrigger>
+					<AccordionTrigger icon={<ImageIcon size={16} />}>
+						Scene
+					</AccordionTrigger>
 					<AccordionContent>
 						Yes. It adheres to the WAI-ARIA design pattern.
 					</AccordionContent>

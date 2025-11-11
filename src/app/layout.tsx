@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 const figtree = Figtree({
 	variable: '--font-figtree',
-	weight: ['300', '400', '600'],
+	weight: ['300', '400', '500', '600'],
 	subsets: ['latin'],
 })
 
