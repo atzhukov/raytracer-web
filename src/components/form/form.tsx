@@ -57,7 +57,7 @@ export default function Form() {
 			<FieldGroup>
 				<Field>
 					<FieldLabel className='flex items-center' htmlFor='fov'>
-						<Scan className='w-[1em] mb-0.5' />
+						<Scan className='w-[1em] mb-0.1' />
 						Field of View
 					</FieldLabel>
 					<div className='flex gap-2 align-center items-center'>
@@ -106,8 +106,8 @@ export default function Form() {
 						aria-label='Start ray tracing immediately'
 						role='switch'
 					/>
-					<Label htmlFor='live' className='flex items-center gap-1.5 mt-0.5'>
-						<RefreshCw className='w-[1em] mb-0.5' />
+					<Label htmlFor='live' className='flex items-center gap-1.5'>
+						<RefreshCw className='w-[1em]' />
 						Live
 					</Label>
 				</div>

@@ -3,7 +3,7 @@ import Form from '@/components/form/form'
 
 export default function Home() {
 	return (
-		<div className='flex justify-between'>
+		<div className='flex justify-between ml-2 mr-2'>
 			<div className='w-128'>
 				<Form />
 			</div>
