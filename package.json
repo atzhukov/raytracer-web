@@ -6,7 +6,7 @@
 	"scripts": {
 		"dev": "next dev --turbopack",
 		"build": "next build --turbopack",
-		"build:rt": "./rtbuild",
+		"build:rt:wasm": "./scripts/rt-wasm-build",
 		"start": "next start",
 		"lint": "eslint",
 		"test": "vitest"
