@@ -1,0 +1,8 @@
+#!/bin/sh
+
+set -e
+
+pnpm wasm-pack build ./raytracer --target=web --no-opt --release --out-dir=../pkg
+cp ./pkg/raytracer_bg.wasm ./public/raytracer_bg.wasm
+
+echo 'wasm module compilation complete.'

@@ -6,7 +6,7 @@
 	"scripts": {
 		"dev": "next dev --turbopack",
 		"build": "next build --turbopack",
-		"build:rt:wasm": "wasm-pack build ./raytracer --target=web --no-opt --release --out-dir=../pkg",
+		"build:rt:wasm": "./scripts/build-rt-wasm",
 		"start": "next start",
 		"lint": "eslint",
 		"test": "vitest"
