@@ -6,25 +6,8 @@ import {
 	AccordionItem,
 	AccordionTrigger,
 } from '@/components/ui/accordion'
-import {Slider} from '@/components/ui/slider'
-import {
-	Field,
-	FieldDescription,
-	FieldGroup,
-	FieldLabel,
-	FieldSet,
-} from '@/components/ui/field'
 import {Button} from '../ui/button'
-import {
-	Aperture,
-	Camera,
-	FolderGit2,
-	ImageIcon,
-	Move3d,
-	Play,
-	RefreshCw,
-	Scan,
-} from 'lucide-react'
+import {Camera, FolderGit2, ImageIcon, Play} from 'lucide-react'
 import {useConfigurationStore} from '@/lib/store'
 import {useReducer, useState} from 'react'
 import {useDebouncedCallback} from 'use-debounce'
@@ -41,7 +24,7 @@ import {
 	CardTitle,
 } from '../ui/card'
 import Link from 'next/link'
-import CoordinateInput from './coordinateInput'
+import CameraFieldSet from '@/components/form/camera'
 
 export default function Form() {
 	const initialCamera = useConfigurationStore.getState().cameraSpec
@@ -71,70 +54,6 @@ export default function Form() {
 		updateCamera(localCamera)
 	}
 
-	const cameraSettings = (
-		<FieldSet>
-			<FieldGroup className='overflow-visible'>
-				<Field>
-					<FieldLabel className='flex items-center gap-2' htmlFor='fov'>
-						<Scan size='16' />
-						Field of View
-					</FieldLabel>
-					<div className='flex gap-2 align-center items-center'>
-						<Slider
-							id='fov'
-							value={[localCamera.fov]}
-							onValueChange={(v) => update({fov: v[0]})}
-							min={1}
-							max={100}
-							step={1}
-							aria-label='Field of View'
-							role='slider'
-						/>
-						<span className='w-[2em] text-right'>{localCamera.fov}&deg;</span>
-					</div>
-					<FieldDescription>
-						The vertical angle visible in the rendered image.
-					</FieldDescription>
-				</Field>
-				<Field>
-					<FieldLabel className='flex items-center gap-2' htmlFor='fov'>
-						<Aperture size='16' />
-						Depth of Field
-					</FieldLabel>
-					<div className='flex gap-2 align-center items-center'>
-						<Slider
-							id='fov'
-							value={[localCamera.aperture]}
-							onValueChange={(v) => update({aperture: v[0]})}
-							min={0}
-							max={50}
-							step={0.5}
-							aria-label='Field of View'
-							role='slider'
-						/>
-						<span className='w-[2em] text-right'>{localCamera.aperture}</span>
-					</div>
-					<FieldDescription>
-						The blurriness of objects that are out of focus.
-					</FieldDescription>
-				</Field>
-				<Field className='overflow-visible'>
-					<FieldLabel className='flex items-center gap-2' htmlFor='fov'>
-						<Move3d size='16' />
-						Location
-					</FieldLabel>
-					<CoordinateInput
-						values={localCamera.source}
-						onChange={(v) => update({source: v})}
-					/>
-					<FieldDescription>
-						The point where the camera is located.
-					</FieldDescription>
-				</Field>
-			</FieldGroup>
-		</FieldSet>
-	)
-
 	return (
 		<form className='h-full'>
 			<Card className='h-full'>
@@ -162,7 +81,7 @@ export default function Form() {
 								Camera Settings
 							</AccordionTrigger>
 							<AccordionContent className='overflow-visible'>
-								{cameraSettings}
+								<CameraFieldSet camera={localCamera} onChange={update} />
 							</AccordionContent>
 						</AccordionItem>
 
@@ -186,7 +105,6 @@ export default function Form() {
 								role='switch'
 							/>
 							<Label htmlFor='live' className='flex items-center gap-1.5'>
-								<RefreshCw className='w-[1em]' />
 								Live
 							</Label>
 						</div>
