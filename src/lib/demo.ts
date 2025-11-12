@@ -6,7 +6,7 @@ export const github = {
 		source: [0.0, 0.35, 10.0],
 		target: [0.0, -0.35, 0.0],
 		aperture: 0.0,
-		focusDistance: 0.0,
+		focusDistance: 10.0,
 	},
 	scene: [
 		{

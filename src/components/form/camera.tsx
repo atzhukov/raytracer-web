@@ -6,7 +6,7 @@ import {
 	FieldLabel,
 	FieldSet,
 } from '@/components/ui/field'
-import {Aperture, Move3d, Scan} from 'lucide-react'
+import {Aperture, Focus, Move3d, ScanEye} from 'lucide-react'
 import {Slider} from '@/components/ui/slider'
 import CoordinateInput from './coordinateInput'
 
@@ -24,6 +24,7 @@ export default function CameraFieldSet({
 			<FieldGroup>
 				<FieldOfViewField camera={camera} onChange={onChange} />
 				<ApertureField camera={camera} onChange={onChange} />
+				<FocusDistanceField camera={camera} onChange={onChange} />
 				<SourceField camera={camera} onChange={onChange} />
 			</FieldGroup>
 		</FieldSet>
@@ -34,7 +35,7 @@ function FieldOfViewField({camera, onChange}: Readonly<CameraFieldProps>) {
 	return (
 		<Field>
 			<FieldLabel className='flex items-center gap-2' htmlFor='fov'>
-				<Scan size='16' />
+				<ScanEye size='16' />
 				Field of View
 			</FieldLabel>
 			<div className='flex gap-2 align-center items-center'>
@@ -79,6 +80,33 @@ function ApertureField({camera, onChange}: Readonly<CameraFieldProps>) {
 			</div>
 			<FieldDescription>
 				The blurriness of objects that are out of focus.
+			</FieldDescription>
+		</Field>
+	)
+}
+
+function FocusDistanceField({camera, onChange}: Readonly<CameraFieldProps>) {
+	return (
+		<Field>
+			<FieldLabel className='flex items-center gap-2' htmlFor='fov'>
+				<Focus size='16' />
+				Focus Distance
+			</FieldLabel>
+			<div className='flex gap-2 align-center items-center'>
+				<Slider
+					id='fov'
+					value={[camera.focusDistance]}
+					onValueChange={(v) => onChange({focusDistance: v[0]})}
+					min={0.5}
+					max={50}
+					step={0.5}
+					aria-label='Field of View'
+					role='slider'
+				/>
+				<span className='w-[2em] text-right'>{camera.focusDistance}</span>
+			</div>
+			<FieldDescription>
+				The distance from the camera to the object in focus.
 			</FieldDescription>
 		</Field>
 	)
