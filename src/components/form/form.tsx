@@ -81,13 +81,13 @@ export default function Form() {
 							id='fov'
 							value={[localCamera.fov]}
 							onValueChange={(v) => update({fov: v[0]})}
-							min={0}
+							min={1}
 							max={100}
 							step={1}
 							aria-label='Field of View'
 							role='slider'
 						/>
-						<span>{localCamera.fov}&deg;</span>
+						<span className='w-[2em] text-right'>{localCamera.fov}&deg;</span>
 					</div>
 					<FieldDescription>
 						Describes the vertical angle visible in the rendered image.
@@ -98,8 +98,8 @@ export default function Form() {
 	)
 
 	return (
-		<form>
-			<Card>
+		<form className='h-full'>
+			<Card className='h-full'>
 				<CardHeader>
 					<CardTitle className='flex gap-2'>
 						Online Ray Tracer{' '}
@@ -117,7 +117,7 @@ export default function Form() {
 						camera configuration or scene objects below to render new images:
 					</CardDescription>
 				</CardHeader>
-				<CardContent className='mt-[-16]'>
+				<CardContent className='mt-[-16] overflow-y-auto'>
 					<Accordion type='single' defaultValue='camera-settings' collapsible>
 						<AccordionItem value='camera-settings'>
 							<AccordionTrigger icon={<Camera size={16} />}>
@@ -130,9 +130,7 @@ export default function Form() {
 							<AccordionTrigger icon={<ImageIcon size={16} />}>
 								Scene
 							</AccordionTrigger>
-							<AccordionContent>
-								Yes. It adheres to the WAI-ARIA design pattern.
-							</AccordionContent>
+							<AccordionContent>TODO</AccordionContent>
 						</AccordionItem>
 					</Accordion>
 					<Separator />

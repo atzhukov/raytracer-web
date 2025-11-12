@@ -12,11 +12,6 @@ const figtree = Figtree({
 	subsets: ['latin'],
 })
 
-const info = {
-	header: 'Raytracer',
-	footer: <a href='https://github.com/atzhukov/raytracer-web'>GitHub</a>,
-} as const
-
 export default function RootLayout({
 	children,
 }: Readonly<{
@@ -26,16 +21,14 @@ export default function RootLayout({
 		<html lang='en'>
 			<body
 				className={`${figtree.className} antialiased bg-(--color-background)`}
+				style={{
+					scrollbarWidth: 'thin',
+					scrollbarColor: 'var(--color-muted) var(--color-background)',
+				}}
 			>
-				<div className='flex flex-col justify-between min-h-screen p-2'>
-					<header className='flex justify-center bg-amber-800 rounded-lg'>
-						{info.header}
-					</header>
-					<main>{children}</main>
-					<footer className='flex justify-center bg-amber-800 rounded-lg'>
-						{info.footer}
-					</footer>
-				</div>
+				<main className='flex flex-col justify-center h-screen max-h-screen p-4'>
+					{children}
+				</main>
 			</body>
 		</html>
 	)
