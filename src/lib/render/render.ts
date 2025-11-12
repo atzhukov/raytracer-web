@@ -71,7 +71,7 @@ export default async function render(
 		worker.onmessage = (event: MessageEvent<ResponseMessage>) => {
 			if (event.data.tag == 'success') {
 				const pixels = event.data.pixels as ImageDataArray
-				let imageData = new ImageData(pixels, width, height)
+				const imageData = new ImageData(pixels, width, height)
 				resolve(imageData)
 			} else if (event.data.tag == 'error') {
 				reject(new Error(event.data.message))
