@@ -9,17 +9,18 @@ Then, install dependencies with:
 $ pnpm install
 ```
 
-### Compile Ray Tracer
+### Compile Ray Tracer (optional)
 
 This application consists of two parts: a Rust [ray tracer](https://github.com/atzhukov/raytracer) and a Next.js frontend.
-The former has to be compiled to WebAssembly first, for which you will need the [Rust toolchain](https://rust-lang.org/tools/install/).
-Then you will need to add the `wasm32-unknown-unknown` target:
+The repository already includes a `.wasm` binary, however, you can also compile it yourself.
+You will need the [Rust toolchain](https://rust-lang.org/tools/install/).
+Then, add the `wasm32-unknown-unknown` target:
 
 ```sh
 $ rustup target add wasm32-unknown-unknown
 ```
 
-Then you can compile the WebAssembly binary with:
+After which you can compile the WebAssembly binary with:
 
 ```sh
 $ pnpm build:rt:wasm
