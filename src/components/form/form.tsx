@@ -73,7 +73,7 @@ export default function Form() {
 			<FieldGroup>
 				<Field>
 					<FieldLabel className='flex items-center gap-2' htmlFor='fov'>
-						<Scan size='16' className='mb-0.1' />
+						<Scan size='16' />
 						Field of View
 					</FieldLabel>
 					<div className='flex gap-2 align-center items-center'>
@@ -117,7 +117,7 @@ export default function Form() {
 						camera configuration or scene objects below to render new images:
 					</CardDescription>
 				</CardHeader>
-				<CardContent className='mt-[-16] overflow-y-auto'>
+				<CardContent className='mt-[-16] overflow-y-auto overscroll-y-auto'>
 					<Accordion type='single' defaultValue='camera-settings' collapsible>
 						<AccordionItem value='camera-settings'>
 							<AccordionTrigger icon={<Camera size={16} />}>
