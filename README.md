@@ -27,8 +27,7 @@ $ pnpm build:rt:wasm
 
 ### Start Next.js App
 
-You will need [Node.js](https://nodejs.org/en/download) 22.0+ (installed with [nvm](https://github.com/nvm-sh/nvm), for example).
-Then simply run the following command to start the server:
+Simply run the following command to start the server:
 
 ```sh
 $ pnpm dev
