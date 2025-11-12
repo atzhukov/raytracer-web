@@ -10,7 +10,7 @@ import {Aperture, Move3d, Scan} from 'lucide-react'
 import {Slider} from '@/components/ui/slider'
 import CoordinateInput from './coordinateInput'
 
-type CameraFieldProps = {
+export type CameraFieldProps = {
 	camera: CameraSpec
 	onChange: (changes: Partial<CameraSpec>) => void
 }

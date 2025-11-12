@@ -1,15 +1,9 @@
 'use client'
 
-import {
-	Accordion,
-	AccordionContent,
-	AccordionItem,
-	AccordionTrigger,
-} from '@/components/ui/accordion'
 import {Button} from '../ui/button'
-import {Camera, FolderGit2, ImageIcon, Play} from 'lucide-react'
+import {FolderGit2, Play} from 'lucide-react'
 import {useConfigurationStore} from '@/lib/store'
-import {useReducer, useState} from 'react'
+import {SyntheticEvent, useReducer, useState} from 'react'
 import {useDebouncedCallback} from 'use-debounce'
 import {CameraSpec} from '@/lib/render/render'
 import {Switch} from '../ui/switch'
@@ -24,7 +18,7 @@ import {
 	CardTitle,
 } from '../ui/card'
 import Link from 'next/link'
-import CameraFieldSet from '@/components/form/camera'
+import {ConfigurationSections} from './section'
 
 export default function Form() {
 	const initialCamera = useConfigurationStore.getState().cameraSpec
@@ -38,7 +32,7 @@ export default function Form() {
 		(newState: CameraSpec) => updateCamera(newState),
 		500
 	)
-	const [localCamera, update] = useReducer(
+	const [localCamera, updateLocalCamera] = useReducer(
 		(state: CameraSpec, changes: Partial<CameraSpec>) => {
 			const newState: CameraSpec = {...state, ...changes}
 			if (live) {
@@ -49,25 +43,12 @@ export default function Form() {
 		initialCamera
 	)
 
-	const commit = (event: React.SyntheticEvent) => {
-		event.preventDefault()
-		updateCamera(localCamera)
-	}
-
 	return (
 		<form className='h-full'>
 			<Card className='h-full'>
 				<CardHeader>
 					<CardTitle className='flex gap-2'>
-						Online Ray Tracer{' '}
-						<Link
-							href='https://github.com/atzhukov/raytracer-web'
-							target='_blank'
-							role='link'
-							aria-label='Link to the GitHub repository'
-						>
-							<FolderGit2 size='1em' />
-						</Link>
+						<Title />
 					</CardTitle>
 					<CardDescription>
 						This ray tracer runs locally in your browser. Play around with the
@@ -75,50 +56,78 @@ export default function Form() {
 					</CardDescription>
 				</CardHeader>
 				<CardContent className='mt-[-16] overflow-y-auto overscroll-y-auto'>
-					<Accordion type='single' defaultValue='camera-settings' collapsible>
-						<AccordionItem value='camera-settings' className='overflow-visible'>
-							<AccordionTrigger icon={<Camera size={16} />}>
-								Camera Settings
-							</AccordionTrigger>
-							<AccordionContent className='overflow-visible'>
-								<CameraFieldSet camera={localCamera} onChange={update} />
-							</AccordionContent>
-						</AccordionItem>
-
-						<AccordionItem value='scene'>
-							<AccordionTrigger icon={<ImageIcon size={16} />}>
-								Scene
-							</AccordionTrigger>
-							<AccordionContent>TODO</AccordionContent>
-						</AccordionItem>
-					</Accordion>
+					<ConfigurationSections
+						camera={localCamera}
+						onChange={updateLocalCamera}
+					/>
 					<Separator />
 				</CardContent>
 				<CardFooter>
 					<div className='w-[100%] flex justify-between'>
-						<div className='flex items-center gap-2'>
-							<Switch
-								id='live'
-								checked={live}
-								onCheckedChange={setLive}
-								aria-label='Start ray tracing immediately'
-								role='switch'
-							/>
-							<Label htmlFor='live' className='flex items-center gap-1.5'>
-								Live
-							</Label>
-						</div>
-						<Button
-							variant='outline'
-							size='sm'
+						<LiveSwitch checked={live} onChange={setLive} />
+						<RenderButton
 							disabled={live}
-							onClick={(e) => commit(e)}
-						>
-							<Play /> Render
-						</Button>
+							onClick={() => updateCamera(localCamera)}
+						/>
 					</div>
 				</CardFooter>
 			</Card>
 		</form>
+	)
+}
+
+function Title() {
+	return (
+		<>
+			Online Ray Tracer{' '}
+			<Link
+				href='https://github.com/atzhukov/raytracer-web'
+				target='_blank'
+				role='link'
+				aria-label='Link to the GitHub repository'
+			>
+				<FolderGit2 size='1em' />
+			</Link>
+		</>
+	)
+}
+
+function LiveSwitch({
+	checked,
+	onChange,
+}: Readonly<{checked: boolean; onChange: (value: boolean) => void}>) {
+	return (
+		<div className='flex items-center gap-2'>
+			<Switch
+				id='live'
+				checked={checked}
+				onCheckedChange={onChange}
+				aria-label='Start ray tracing immediately'
+				role='switch'
+			/>
+			<Label htmlFor='live' className='flex items-center gap-1.5'>
+				Live
+			</Label>
+		</div>
+	)
+}
+
+function RenderButton({
+	disabled,
+	onClick,
+}: Readonly<{disabled: boolean; onClick: () => void}>) {
+	const onClickPreventingDefault = (e: SyntheticEvent) => {
+		e.preventDefault()
+		onClick()
+	}
+	return (
+		<Button
+			variant='outline'
+			size='sm'
+			disabled={disabled}
+			onClick={onClickPreventingDefault}
+		>
+			<Play /> Render
+		</Button>
 	)
 }
