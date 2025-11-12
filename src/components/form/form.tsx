@@ -1,14 +1,12 @@
 'use client'
 
-import {Button} from '../ui/button'
+import {Button} from '@/components/ui/button'
 import {FolderGit2, Play} from 'lucide-react'
-import {useConfigurationStore} from '@/lib/store'
-import {SyntheticEvent, useReducer, useState} from 'react'
-import {useDebouncedCallback} from 'use-debounce'
-import {CameraSpec} from '@/lib/render/render'
-import {Switch} from '../ui/switch'
-import {Label} from '../ui/label'
-import {Separator} from '../ui/separator'
+import {useCamera} from '@/lib/store'
+import {SyntheticEvent, useState} from 'react'
+import {Switch} from '@/components/ui/switch'
+import {Label} from '@/components/ui/label'
+import {Separator} from '@/components/ui/separator'
 import {
 	Card,
 	CardContent,
@@ -16,32 +14,13 @@ import {
 	CardFooter,
 	CardHeader,
 	CardTitle,
-} from '../ui/card'
+} from '@/components/ui/card'
 import Link from 'next/link'
-import {ConfigurationSections} from './section'
+import {ConfigurationSections} from '@/components/form/section'
 
 export default function Form() {
-	const initialCamera = useConfigurationStore.getState().cameraSpec
-	const updateCamera = useConfigurationStore((state) => state.setCameraSpec)
-
 	const [live, setLive] = useState(true)
-
-	// Keep a local camera spec object and debounce changes to the configuration store,
-	// so that the UI updates immediately but ray tracing only starts after a delay
-	const updateGlobalCameraDebounced = useDebouncedCallback(
-		(newState: CameraSpec) => updateCamera(newState),
-		500
-	)
-	const [localCamera, updateLocalCamera] = useReducer(
-		(state: CameraSpec, changes: Partial<CameraSpec>) => {
-			const newState: CameraSpec = {...state, ...changes}
-			if (live) {
-				updateGlobalCameraDebounced(newState)
-			}
-			return newState
-		},
-		initialCamera
-	)
+	const {camera, updateCamera, flushCamera} = useCamera(live)
 
 	return (
 		<form className='h-full'>
@@ -56,19 +35,13 @@ export default function Form() {
 					</CardDescription>
 				</CardHeader>
 				<CardContent className='mt-[-16] overflow-y-auto overscroll-y-auto'>
-					<ConfigurationSections
-						camera={localCamera}
-						onChange={updateLocalCamera}
-					/>
+					<ConfigurationSections camera={camera} onChange={updateCamera} />
 					<Separator />
 				</CardContent>
 				<CardFooter>
 					<div className='w-[100%] flex justify-between'>
 						<LiveSwitch checked={live} onChange={setLive} />
-						<RenderButton
-							disabled={live}
-							onClick={() => updateCamera(localCamera)}
-						/>
+						<RenderButton disabled={live} onClick={flushCamera} />
 					</div>
 				</CardFooter>
 			</Card>
