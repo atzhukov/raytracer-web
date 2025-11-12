@@ -16,9 +16,11 @@ import {
 } from '@/components/ui/field'
 import {Button} from '../ui/button'
 import {
+	Aperture,
 	Camera,
 	FolderGit2,
 	ImageIcon,
+	Move3d,
 	Play,
 	RefreshCw,
 	Scan,
@@ -39,6 +41,7 @@ import {
 	CardTitle,
 } from '../ui/card'
 import Link from 'next/link'
+import CoordinateInput from './coordinateInput'
 
 export default function Form() {
 	const initialCamera = useConfigurationStore.getState().cameraSpec
@@ -70,7 +73,7 @@ export default function Form() {
 
 	const cameraSettings = (
 		<FieldSet>
-			<FieldGroup>
+			<FieldGroup className='overflow-visible'>
 				<Field>
 					<FieldLabel className='flex items-center gap-2' htmlFor='fov'>
 						<Scan size='16' />
@@ -90,7 +93,42 @@ export default function Form() {
 						<span className='w-[2em] text-right'>{localCamera.fov}&deg;</span>
 					</div>
 					<FieldDescription>
-						Describes the vertical angle visible in the rendered image.
+						The vertical angle visible in the rendered image.
+					</FieldDescription>
+				</Field>
+				<Field>
+					<FieldLabel className='flex items-center gap-2' htmlFor='fov'>
+						<Aperture size='16' />
+						Depth of Field
+					</FieldLabel>
+					<div className='flex gap-2 align-center items-center'>
+						<Slider
+							id='fov'
+							value={[localCamera.aperture]}
+							onValueChange={(v) => update({aperture: v[0]})}
+							min={0}
+							max={50}
+							step={0.5}
+							aria-label='Field of View'
+							role='slider'
+						/>
+						<span className='w-[2em] text-right'>{localCamera.aperture}</span>
+					</div>
+					<FieldDescription>
+						The blurriness of objects that are out of focus.
+					</FieldDescription>
+				</Field>
+				<Field className='overflow-visible'>
+					<FieldLabel className='flex items-center gap-2' htmlFor='fov'>
+						<Move3d size='16' />
+						Location
+					</FieldLabel>
+					<CoordinateInput
+						values={localCamera.source}
+						onChange={(v) => update({source: v})}
+					/>
+					<FieldDescription>
+						The point where the camera is located.
 					</FieldDescription>
 				</Field>
 			</FieldGroup>
@@ -119,11 +157,13 @@ export default function Form() {
 				</CardHeader>
 				<CardContent className='mt-[-16] overflow-y-auto overscroll-y-auto'>
 					<Accordion type='single' defaultValue='camera-settings' collapsible>
-						<AccordionItem value='camera-settings'>
+						<AccordionItem value='camera-settings' className='overflow-visible'>
 							<AccordionTrigger icon={<Camera size={16} />}>
 								Camera Settings
 							</AccordionTrigger>
-							<AccordionContent>{cameraSettings}</AccordionContent>
+							<AccordionContent className='overflow-visible'>
+								{cameraSettings}
+							</AccordionContent>
 						</AccordionItem>
 
 						<AccordionItem value='scene'>

@@ -53,7 +53,7 @@ type Material =
 /**
  * A vector of three numeric values.
  */
-type Vec3 = [number, number, number]
+export type Vec3 = [number, number, number]
 
 /**
  * Renders a specified scene using the WASM raytracer module.
