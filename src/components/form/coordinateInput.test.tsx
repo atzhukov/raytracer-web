@@ -1,0 +1,35 @@
+import {Vec3} from '@/lib/render/render'
+import {describe, expect, it, vi} from 'vitest'
+import {render as browserRender} from 'vitest-browser-react'
+import {page} from 'vitest/browser'
+import CoordinateInput from './coordinateInput'
+
+describe('CoordinateInput', () => {
+	it('should call onChange callback with correct values', async () => {
+		const props = {
+			values: [0, 0, 0] as Vec3,
+			onChange: (values: Vec3) => {},
+		}
+		const onChange = vi.spyOn(props, 'onChange')
+
+		const result = await browserRender(<CoordinateInput {...props} />)
+		const screen = page.elementLocator(result.baseElement)
+
+		await screen.getByLabelText('The Y coordinate').fill('-5')
+		expect(onChange).toHaveBeenCalledWith(expect.arrayContaining([0, -5, 0]))
+	})
+
+	it('should treat empty input as zero', async () => {
+		const props = {
+			values: [1, 1, 1] as Vec3,
+			onChange: (values: Vec3) => {},
+		}
+		const onChange = vi.spyOn(props, 'onChange')
+
+		const result = await browserRender(<CoordinateInput {...props} />)
+		const screen = page.elementLocator(result.baseElement)
+
+		await screen.getByLabelText('The X coordinate').fill('')
+		expect(onChange).toHaveBeenCalledWith(expect.arrayContaining([0, 1, 1]))
+	})
+})
