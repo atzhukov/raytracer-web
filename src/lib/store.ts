@@ -11,7 +11,7 @@ interface ConfigurationStore {
 	addSceneObject: (object: SceneObject) => void
 }
 
-const useConfigurationStore = create<ConfigurationStore>((set) => ({
+export const useConfigurationStore = create<ConfigurationStore>((set) => ({
 	cameraSpec: github.camera,
 	scene: github.scene,
 	setCameraSpec: (spec) =>
