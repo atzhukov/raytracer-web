@@ -1,8 +1,4 @@
-'use client'
-
-import * as raytracer from '@/../pkg/raytracer.js'
-
-let initialised = false
+import {RequestMessage, ResponseMessage} from './worker'
 
 /**
  * The input type for the WASM raytracer module.
@@ -15,19 +11,19 @@ export type RaytracerInput = {
 /**
  * The camera configuration.
  */
-type CameraSpec = {
-	fov?: number
-	source?: Vec3
-	target?: Vec3
-	aperture?: number
-	focusDistance?: number
+export type CameraSpec = {
+	fov: number
+	source: Vec3
+	target: Vec3
+	aperture: number
+	focusDistance: number
 }
 
 /**
  * An object of a scene.
  * At the moment, only spheres are supported.
  */
-type SceneObject = {
+export type SceneObject = {
 	type: 'sphere'
 	center: Vec3
 	radius: number
@@ -57,7 +53,7 @@ type Material =
 /**
  * A vector of three numeric values.
  */
-type Vec3 = [number, number, number]
+export type Vec3 = [number, number, number]
 
 /**
  * Renders a specified scene using the WASM raytracer module.
@@ -69,13 +65,19 @@ export default async function render(
 	width: number,
 	height: number
 ): Promise<ImageData> {
-	if (!initialised) {
-		await raytracer.default()
-		initialised = true
-	}
+	return new Promise((resolve, reject) => {
+		const worker = new Worker(new URL('./worker.ts', import.meta.url))
 
-	const pixels = raytracer.render(input, width, height)
-	const imageDataArray = new Uint8ClampedArray(pixels)
+		worker.onmessage = (event: MessageEvent<ResponseMessage>) => {
+			if (event.data.tag == 'success') {
+				const pixels = event.data.pixels as ImageDataArray
+				const imageData = new ImageData(pixels, width, height)
+				resolve(imageData)
+			} else if (event.data.tag == 'error') {
+				reject(new Error(event.data.message))
+			}
+		}
 
-	return new ImageData(imageDataArray, width, height)
+		worker.postMessage({input, width, height} satisfies RequestMessage)
+	})
 }

@@ -7,18 +7,19 @@ import {
 	EmptyMedia,
 	EmptyTitle,
 } from '@/components/ui/empty'
-import render, {RaytracerInput} from '@/lib/render'
+import render, {RaytracerInput} from '@/lib/render/render'
 import {Loader, Settings, TriangleAlert} from 'lucide-react'
 import {JSX, useEffect, useReducer, useRef} from 'react'
 import progress from './state'
+import useConfiguration from '@/lib/store'
 
 type CanvasProps = {
 	width: number
 	height: number
-	image: RaytracerInput | null
 }
 
 export default function Canvas(props: Readonly<CanvasProps>) {
+	const configuration = useConfiguration()
 	const canvasRef = useRef<HTMLCanvasElement>(null)
 
 	const [state, transition] = useReducer(progress, {
@@ -30,20 +31,31 @@ export default function Canvas(props: Readonly<CanvasProps>) {
 	// Re-render the image and set state.imageData when the props change
 	useEffect(() => {
 		async function getImageData() {
-			if (!props.image) {
+			const input: RaytracerInput = {
+				camera: configuration.camera,
+				scene: configuration.scene,
+			} // eslint
+
+			if (input.scene.length == 0) {
 				transition({to: 'empty'})
 				return
 			}
+
 			try {
 				transition({to: 'working'})
-				const imageData = await render(props.image, props.width, props.height)
+				const ratio = window.devicePixelRatio || 1
+				const imageData = await render(
+					input,
+					props.width * ratio,
+					props.height * ratio
+				)
 				transition({to: 'done', imageData})
 			} catch (error) {
 				transition({to: 'error', message: errorMessage(error)})
 			}
 		}
 		getImageData()
-	}, [props.image, props.width, props.height])
+	}, [configuration.camera, configuration.scene, props.width, props.height])
 
 	// Fill canvas when state.imageData changes
 	useEffect(() => {
