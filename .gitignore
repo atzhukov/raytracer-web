@@ -12,6 +12,7 @@
 
 # wasm
 /pkg
+*.wasm
 
 # testing
 /coverage
