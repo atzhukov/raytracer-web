@@ -4,6 +4,8 @@ set -e
 
 git submodule update --init --recursive
 pnpm wasm-pack build ./raytracer --target=web --no-opt --release --out-dir=../pkg
+
+mkdir -p public
 cp ./pkg/raytracer_bg.wasm ./public/raytracer_bg.wasm
 
 echo 'wasm module compilation complete.'
