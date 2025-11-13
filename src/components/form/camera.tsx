@@ -39,19 +39,16 @@ function FieldOfViewField({camera, onChange}: Readonly<CameraFieldProps>) {
 			label='Field of View'
 			description='The vertical angle visible in the rendered image.'
 		>
-			<div className='flex gap-2 align-center items-center'>
-				<Slider
-					id={id}
-					value={[camera.fov]}
-					onValueChange={(v) => onChange({fov: v[0]})}
-					min={1}
-					max={100}
-					step={1}
-					aria-label='Field of View'
-					role='slider'
-				/>
-				<span className='w-[2em] text-right'>{camera.fov}&deg;</span>
-			</div>
+			<CameraSlider
+				id={id}
+				value={camera.fov}
+				displayValue={`${camera.fov}°`}
+				onChange={(v) => onChange({fov: v})}
+				min={1}
+				max={100}
+				step={1}
+				ariaLabel='Field of View'
+			/>
 		</Skeleton>
 	)
 }
@@ -65,19 +62,15 @@ function ApertureField({camera, onChange}: Readonly<CameraFieldProps>) {
 			label='Depth of Field'
 			description='The blurriness of objects that are out of focus.'
 		>
-			<div className='flex gap-2 align-center items-center'>
-				<Slider
-					id={id}
-					value={[camera.aperture]}
-					onValueChange={(v) => onChange({aperture: v[0]})}
-					min={0}
-					max={50}
-					step={0.5}
-					aria-label='Depth of Field'
-					role='slider'
-				/>
-				<span className='w-[2em] text-right'>{camera.aperture}</span>
-			</div>
+			<CameraSlider
+				id={id}
+				value={camera.aperture}
+				onChange={(v) => onChange({aperture: v})}
+				min={0}
+				max={50}
+				step={0.5}
+				ariaLabel='Depth of Field'
+			/>
 		</Skeleton>
 	)
 }
@@ -91,19 +84,15 @@ function FocusDistanceField({camera, onChange}: Readonly<CameraFieldProps>) {
 			label='Focus Distance'
 			description='The distance from the camera to the object in focus.'
 		>
-			<div className='flex gap-2 align-center items-center'>
-				<Slider
-					id={id}
-					value={[camera.focusDistance]}
-					onValueChange={(v) => onChange({focusDistance: v[0]})}
-					min={0.5}
-					max={50}
-					step={0.5}
-					aria-label='Focus Distance'
-					role='slider'
-				/>
-				<span className='w-[2em] text-right'>{camera.focusDistance}</span>
-			</div>
+			<CameraSlider
+				id={id}
+				value={camera.focusDistance}
+				onChange={(v) => onChange({focusDistance: v})}
+				min={0.5}
+				max={50}
+				step={0.5}
+				ariaLabel='Focus Distance'
+			/>
 		</Skeleton>
 	)
 }
@@ -121,6 +110,36 @@ function SourceField({camera, onChange}: Readonly<CameraFieldProps>) {
 				onChange={(v) => onChange({source: v})}
 			/>
 		</Skeleton>
+	)
+}
+
+type CameraSliderProps = {
+	id: string
+	value: number
+	displayValue?: string
+	onChange: (value: number) => void
+	ariaLabel: string
+	min: number
+	max: number
+	step: number
+}
+function CameraSlider(props: Readonly<CameraSliderProps>) {
+	return (
+		<div className='flex gap-2 align-center items-center'>
+			<Slider
+				id={props.id}
+				value={[props.value]}
+				onValueChange={(v) => props.onChange(v[0])}
+				min={props.min}
+				max={props.max}
+				step={props.step}
+				role='slider'
+				aria-label={props.ariaLabel}
+			/>
+			<span className='w-[2em] text-right'>
+				{props.displayValue || props.value}
+			</span>
+		</div>
 	)
 }
 
