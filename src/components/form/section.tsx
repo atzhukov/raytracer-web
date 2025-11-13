@@ -7,26 +7,23 @@ import {
 } from '@/components/ui/accordion'
 import CameraFieldSet, {CameraFieldProps} from './camera'
 
-export function ConfigurationSections({
-	camera,
-	onChange,
-}: Readonly<CameraFieldProps>) {
+export function ConfigurationSections(props: Readonly<CameraFieldProps>) {
 	return (
 		<Accordion type='single' defaultValue='camera-settings' collapsible>
-			<CameraSection camera={camera} onChange={onChange} />
+			<CameraSection {...props} />
 			<SceneSection />
 		</Accordion>
 	)
 }
 
-export function CameraSection({camera, onChange}: Readonly<CameraFieldProps>) {
+export function CameraSection(props: Readonly<CameraFieldProps>) {
 	return (
 		<AccordionItem value='camera-settings'>
 			<AccordionTrigger icon={<Camera size={16} />}>
 				Camera Settings
 			</AccordionTrigger>
 			<AccordionContent className='overflow-visible'>
-				<CameraFieldSet camera={camera} onChange={onChange} />
+				<CameraFieldSet {...props} />
 			</AccordionContent>
 		</AccordionItem>
 	)

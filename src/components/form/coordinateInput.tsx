@@ -40,48 +40,49 @@ export default function CoordinateInput({
 
 	return (
 		<div className='flex gap-2'>
-			<InputGroup>
-				<InputGroupInput
-					id='x'
-					value={coordinate.x}
-					type='number'
-					aria-label='The X coordinate'
-					placeholder='0'
-					onChange={(e) => emitChange(0, +e.target.value)}
-					className='placeholder:text-foreground'
-				/>
-				<InputGroupAddon>
-					<Label htmlFor='x'>X</Label>
-				</InputGroupAddon>
-			</InputGroup>
-			<InputGroup>
-				<InputGroupInput
-					id='y'
-					value={coordinate.y}
-					type='number'
-					aria-label='The Y coordinate'
-					placeholder='0'
-					onChange={(e) => emitChange(1, +e.target.value)}
-					className='placeholder:text-foreground'
-				/>
-				<InputGroupAddon>
-					<Label htmlFor='y'>Y</Label>
-				</InputGroupAddon>
-			</InputGroup>
-			<InputGroup>
-				<InputGroupInput
-					id='z'
-					value={coordinate.z}
-					type='number'
-					aria-label='The Z coordinate'
-					placeholder='0'
-					onChange={(e) => emitChange(2, +e.target.value)}
-					className='placeholder:text-foreground'
-				/>
-				<InputGroupAddon>
-					<Label htmlFor='z'>Z</Label>
-				</InputGroupAddon>
-			</InputGroup>
+			<CoordinateInputField
+				value={coordinate.x}
+				label='x'
+				onChange={(v) => emitChange(0, v)}
+			/>
+			<CoordinateInputField
+				value={coordinate.y}
+				label='y'
+				onChange={(v) => emitChange(1, v)}
+			/>
+			<CoordinateInputField
+				value={coordinate.z}
+				label='z'
+				onChange={(v) => emitChange(2, v)}
+			/>
 		</div>
+	)
+}
+
+function CoordinateInputField({
+	value,
+	label,
+	onChange,
+}: Readonly<{
+	value: number | ''
+	label: keyof Coordinate
+	onChange: (value: number) => void
+}>) {
+	const upperLabel = label.toUpperCase()
+	return (
+		<InputGroup>
+			<InputGroupInput
+				id={label}
+				value={value}
+				type='number'
+				placeholder='0'
+				onChange={(e) => onChange(+e.target.value)}
+				className='placeholder:text-foreground'
+				aria-label={`The ${upperLabel} coordinate`}
+			/>
+			<InputGroupAddon>
+				<Label htmlFor={label}>{upperLabel}</Label>
+			</InputGroupAddon>
+		</InputGroup>
 	)
 }
