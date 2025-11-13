@@ -52,7 +52,7 @@ export default function Form() {
 function Title() {
 	return (
 		<>
-			Online Ray Tracer{' '}
+			Web Ray Tracer{' '}
 			<Link
 				href='https://github.com/atzhukov/raytracer-web'
 				target='_blank'
