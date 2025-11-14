@@ -3,13 +3,14 @@
 	"version": "0.1.0",
 	"private": true,
 	"packageManager": "pnpm@10.20.0",
+	"type": "module",
 	"scripts": {
 		"dev": "next dev --turbopack",
 		"build": "next build --turbopack",
 		"start": "next start",
 		"lint": "eslint",
 		"test": "vitest",
-		"postinstall": "./scripts/postinstall"
+		"postinstall": "node ./scripts/postinstall.js"
 	},
 	"dependencies": {
 		"@atzhukov/raytracer": "^0.1.1",
