@@ -33,7 +33,7 @@ export function SceneSection() {
 	return (
 		<AccordionItem value='scene'>
 			<AccordionTrigger icon={<ImageIcon size={16} />}>Scene</AccordionTrigger>
-			<AccordionContent>TODO</AccordionContent>
+			<AccordionContent>Coming Soon!</AccordionContent>
 		</AccordionItem>
 	)
 }

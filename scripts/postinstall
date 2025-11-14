@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+if [ -e node_modules/@atzhukov/raytracer/raytracer_bg.wasm ]; then
+	mkdir -p public
+	cp node_modules/@atzhukov/raytracer/raytracer_bg.wasm public/raytracer_bg.wasm
+fi

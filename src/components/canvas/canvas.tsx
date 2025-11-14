@@ -51,6 +51,7 @@ export default function Canvas(props: Readonly<CanvasProps>) {
 				)
 				transition({to: 'done', imageData})
 			} catch (error) {
+				console.log(error)
 				transition({to: 'error', message: errorMessage(error)})
 			}
 		}

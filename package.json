@@ -6,12 +6,13 @@
 	"scripts": {
 		"dev": "next dev --turbopack",
 		"build": "next build --turbopack",
-		"build:rt:wasm": "./scripts/build-rt-wasm",
 		"start": "next start",
 		"lint": "eslint",
-		"test": "vitest"
+		"test": "vitest",
+		"postinstall": "./scripts/postinstall"
 	},
 	"dependencies": {
+		"@atzhukov/raytracer": "^0.1.1",
 		"@radix-ui/react-accordion": "^1.2.12",
 		"@radix-ui/react-label": "^2.1.8",
 		"@radix-ui/react-separator": "^1.1.8",
