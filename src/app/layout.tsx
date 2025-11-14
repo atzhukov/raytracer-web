@@ -3,7 +3,7 @@ import {Figtree} from 'next/font/google'
 import './globals.css'
 
 export const metadata: Metadata = {
-	title: 'Raytracer',
+	title: 'Web Ray Tracer',
 }
 
 const figtree = Figtree({
