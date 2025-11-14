@@ -1,7 +1,6 @@
-ignoredBuiltDependencies:
-  - wasm-pack
-
 onlyBuiltDependencies:
   - '@tailwindcss/oxide'
   - sharp
   - unrs-resolver
+  - esbuild
+  - wasm-pack

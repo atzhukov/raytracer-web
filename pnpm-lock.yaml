@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@atzhukov/raytracer':
+        specifier: ^0.1.1
+        version: 0.1.1
       '@radix-ui/react-accordion':
         specifier: ^1.2.12
         version: 1.2.12(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -141,6 +144,9 @@ packages:
 
   '@asamuzakjp/nwsapi@2.3.9':
     resolution: {integrity: sha512-n8GuYSrI9bF7FFZ/SjhwevlHc8xaVlb/7HmHelnc/PZXBD2ZR49NnN9sMMuDdEGPeeRQ5d0hqlSlEpgCX3Wl0Q==}
+
+  '@atzhukov/raytracer@0.1.1':
+    resolution: {integrity: sha512-t4/bVikeM1k8p3oXPXGlAnmzkqIhla2fOE3eRLmc3jNbKH//cNRhlVCHWqyQI9sZ0zO/YMKZpq8gou4f3O75/Q==}
 
   '@babel/code-frame@7.27.1':
     resolution: {integrity: sha512-cjQ7ZlQ0Mv3b47hABuTevyTuYN4i+loJKGeV9flcCgIK37cCXRh+L1bd3iBHlynerhQ7BhCkn2BPbQUL+rGqFg==}
@@ -3200,6 +3206,8 @@ snapshots:
       lru-cache: 11.2.2
 
   '@asamuzakjp/nwsapi@2.3.9': {}
+
+  '@atzhukov/raytracer@0.1.1': {}
 
   '@babel/code-frame@7.27.1':
     dependencies:

@@ -1,4 +1,5 @@
-import {RaytracerInput} from './render'
+import {RaytracerInput} from '@/lib/render/render'
+import * as raytracer from '@atzhukov/raytracer'
 
 export type RequestMessage = {
 	input: RaytracerInput
@@ -36,12 +37,13 @@ globalThis.onmessage = async (event: MessageEvent<RequestMessage>) => {
 	try {
 		const {input, width, height} = event.data
 
-		const raytracer = await import('@/../pkg/raytracer.js')
+		// We have to serve the .wasm binary from /public, it seems turbopack cannot serve it correctly
+		// otherwise (webpack also has some issues). A postinstall script handles this.
 		await raytracer.default({
 			module_or_path: `${self.location.origin}/raytracer_bg.wasm`,
 		})
-
 		const pixels = raytracer.render(input, width, height)
+
 		const imageDataArray = new Uint8ClampedArray(pixels)
 		postImage(imageDataArray)
 	} catch (error) {
