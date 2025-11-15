@@ -10,6 +10,7 @@ interface ConfigurationStore {
 	scene: Scene
 	setCameraSpec: (spec: Partial<CameraSpec>) => void
 	addSceneObject: (object: SceneObjectAny) => void
+	removeSceneObject: (object: SceneObjectAny) => void
 	clearScene: () => void
 }
 
@@ -26,6 +27,11 @@ export const useConfigurationStore = create<ConfigurationStore>((set) => ({
 			cameraSpec: state.cameraSpec,
 			scene: [...state.scene, object],
 		})),
+	removeSceneObject: (object) =>
+		set((state) => ({
+			cameraSpec: state.cameraSpec,
+			scene: state.scene.filter((currentObject) => currentObject != object),
+		})),
 	clearScene: () =>
 		set((state) => ({
 			cameraSpec: state.cameraSpec,
@@ -41,6 +47,9 @@ export default function useConfiguration() {
 	return {
 		camera: useConfigurationStore((state) => state.cameraSpec),
 		scene: useConfigurationStore((state) => state.scene),
+		removeSceneObject: useConfigurationStore(
+			(state) => state.removeSceneObject
+		),
 		clearScene: useConfigurationStore((state) => state.clearScene),
 	}
 }

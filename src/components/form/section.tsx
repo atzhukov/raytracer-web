@@ -8,8 +8,7 @@ import {
 import CameraFieldSet, {CameraFieldProps} from './camera'
 import {Button} from '@/components/ui/button'
 import useConfiguration from '@/lib/store'
-import {AddToSceneDropdownMenu, SceneObjectsList} from './scene'
-import {SyntheticEvent} from 'react'
+import SceneObjectsList, {AddToSceneDropdownMenu} from './scene'
 
 export function ConfigurationSections(props: Readonly<CameraFieldProps>) {
 	return (
@@ -34,13 +33,13 @@ export function CameraSection(props: Readonly<CameraFieldProps>) {
 }
 
 export function SceneSection() {
-	const {scene, clearScene} = useConfiguration()
+	const {scene, removeSceneObject, clearScene} = useConfiguration()
 
 	return (
 		<AccordionItem value='scene'>
 			<AccordionTrigger icon={<ImageIcon size={16} />}>Scene</AccordionTrigger>
 			<AccordionContent>
-				<SceneObjectsList scene={scene} />
+				<SceneObjectsList scene={scene} onDelete={removeSceneObject} />
 				<div className='mt-2 flex justify-between'>
 					<AddToSceneDropdownMenu />
 					<Button
