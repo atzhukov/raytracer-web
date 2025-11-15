@@ -37,24 +37,36 @@ const buttonVariants = cva(
 )
 
 function Button({
-  className,
-  variant,
-  size,
-  asChild = false,
-  ...props
-}: React.ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean
-  }) {
-  const Comp = asChild ? Slot : "button"
+	className,
+	variant,
+	size,
+	asChild = false,
+	preventDefault = false,
+	...props
+}: React.ComponentProps<'button'> &
+	VariantProps<typeof buttonVariants> & {
+		asChild?: boolean
+		preventDefault?: boolean
+	}) {
+	const Comp = asChild ? Slot : 'button'
 
-  return (
-    <Comp
-      data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
-      {...props}
-    />
-  )
+	const onClickPreventingDefault = (
+		e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+	) => {
+		if (preventDefault) {
+			e.preventDefault()
+		}
+		props.onClick?.(e)
+	}
+
+	return (
+		<Comp
+			data-slot='button'
+			className={cn(buttonVariants({variant, size, className}))}
+			{...props}
+			onClick={onClickPreventingDefault}
+		/>
+	)
 }
 
 export { Button, buttonVariants }

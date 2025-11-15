@@ -1,5 +1,5 @@
 import {create} from 'zustand'
-import {CameraSpec, RaytracerInput, Scene} from '@/lib/render/render'
+import {CameraSpec, Scene} from '@/lib/render/render'
 import {github} from './demo'
 import {useDebouncedCallback} from 'use-debounce'
 import {useReducer} from 'react'
@@ -10,6 +10,7 @@ interface ConfigurationStore {
 	scene: Scene
 	setCameraSpec: (spec: Partial<CameraSpec>) => void
 	addSceneObject: (object: SceneObjectAny) => void
+	clearScene: () => void
 }
 
 export const useConfigurationStore = create<ConfigurationStore>((set) => ({
@@ -25,16 +26,22 @@ export const useConfigurationStore = create<ConfigurationStore>((set) => ({
 			cameraSpec: state.cameraSpec,
 			scene: [...state.scene, object],
 		})),
+	clearScene: () =>
+		set((state) => ({
+			cameraSpec: state.cameraSpec,
+			scene: [],
+		})),
 }))
 
 /**
  * A hook that provides subscriptions to the current configuration.
  * @returns an object containing the camera state.
  */
-export default function useConfiguration(): RaytracerInput {
+export default function useConfiguration() {
 	return {
 		camera: useConfigurationStore((state) => state.cameraSpec),
 		scene: useConfigurationStore((state) => state.scene),
+		clearScene: useConfigurationStore((state) => state.clearScene),
 	}
 }
 
