@@ -1,15 +1,6 @@
 import {Scene} from '@/lib/render/render'
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import properties, {SceneObjectAny, supportedObjects} from '@/lib/objects'
-import {capitalize} from '@/lib/utils'
-import {Pencil, Plus, Trash2} from 'lucide-react'
+import properties, {SceneObjectAny} from '@/lib/objects'
+import {Pencil, Trash2} from 'lucide-react'
 import {Button} from '@/components/ui/button'
 import {
 	Card,
@@ -76,43 +67,5 @@ function SceneObjectCard({
 				</CardAction>
 			</CardHeader>
 		</Card>
-	)
-}
-
-export function AddToSceneDropdownMenu() {
-	return (
-		<DropdownMenu>
-			<DropdownMenuTrigger asChild>
-				<Button
-					variant='outline'
-					size='sm'
-					className='focus-visible:ring-0 focus-visible:ring-offset-0'
-				>
-					<Plus />
-					Add
-				</Button>
-			</DropdownMenuTrigger>
-			<DropdownMenuContent>
-				<ObjectTypeDropdownMenuItems />
-				<DropdownMenuSeparator />
-				<DropdownMenuLabel>Presets</DropdownMenuLabel>
-				<DropdownMenuItem>GitHub Demo</DropdownMenuItem>
-			</DropdownMenuContent>
-		</DropdownMenu>
-	)
-}
-
-function ObjectTypeDropdownMenuItems() {
-	return (
-		<>
-			{Object.entries(supportedObjects).map(([type, config]) => {
-				return (
-					<DropdownMenuItem key={type}>
-						{config.icon}
-						{capitalize(type)}
-					</DropdownMenuItem>
-				)
-			})}
-		</>
 	)
 }

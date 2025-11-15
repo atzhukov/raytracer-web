@@ -2,6 +2,7 @@ import {CameraSpec} from '@/lib/render/render'
 import {
 	Field,
 	FieldDescription,
+	FieldError,
 	FieldGroup,
 	FieldLabel,
 	FieldSet,
@@ -149,15 +150,20 @@ type SkeletonProps = {
 	label: string
 	children: React.ReactNode
 	description?: string
+	error?: string
 }
-function Skeleton(props: Readonly<SkeletonProps>) {
+export function Skeleton(props: Readonly<SkeletonProps>) {
 	return (
-		<Field>
-			<FieldLabel className='flex items-center gap-2' htmlFor={props.id}>
+		<Field data-invalid={!!props.error}>
+			<FieldLabel
+				className='flex items-center gap-2 text-foreground'
+				htmlFor={props.id}
+			>
 				{props.icon}
 				{props.label}
 			</FieldLabel>
 			{props.children}
+			<FieldError>{props.error}</FieldError>
 			{props.description && (
 				<FieldDescription>{props.description}</FieldDescription>
 			)}

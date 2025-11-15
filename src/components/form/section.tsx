@@ -8,7 +8,8 @@ import {
 import CameraFieldSet, {CameraFieldProps} from './camera'
 import {Button} from '@/components/ui/button'
 import useConfiguration from '@/lib/store'
-import SceneObjectsList, {AddToSceneDropdownMenu} from './scene'
+import SceneObjectsList from './scene'
+import {AddObjectDropdownMenu} from '../dialog/object'
 
 export function ConfigurationSections(props: Readonly<CameraFieldProps>) {
 	return (
@@ -41,7 +42,7 @@ export function SceneSection() {
 			<AccordionContent>
 				<SceneObjectsList scene={scene} onDelete={removeSceneObject} />
 				<div className='mt-2 flex justify-between'>
-					<AddToSceneDropdownMenu />
+					<AddObjectDropdownMenu />
 					<Button
 						variant='outline'
 						size='sm'

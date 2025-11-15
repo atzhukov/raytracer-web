@@ -33,6 +33,12 @@ export const supportedObjects: SupportedObjectTypeConfigs = {
 			`${capitalize(sphere.material.type)} ${capitalize(sphere.type)} ` +
 			`at (${sphere.center[0]}, ${sphere.center[1]}, ${sphere.center[2]}) ` +
 			`with radius ${sphere.radius}`,
+		initialValue: () => ({
+			type: 'sphere',
+			center: [0, 0, 0],
+			radius: 1,
+			material: {type: 'metal', color: [0.0039, 0.5725, 0.5333], fuzz: 0},
+		}),
 	},
 }
 
@@ -48,7 +54,13 @@ export default function properties<T extends SceneObjectType>(
 	return {
 		...config,
 		description: config.description(object),
+		initialValue: config.initialValue(),
 	}
+}
+export function config<T extends SceneObjectType>(
+	type: T
+): ObjectTypeConfig<T> {
+	return supportedObjects[type]
 }
 
 // MARK: - Type Definitions
@@ -65,6 +77,7 @@ type SupportedObjectTypeConfigs = {
 type ObjectTypeConfig<T extends SceneObjectType> = {
 	icon: React.ReactNode
 	description: (object: SceneObject<T>) => string
+	initialValue: () => SceneObject<T>
 }
 
 /** The type that represents a resolved configuration for a particular scene object instance
