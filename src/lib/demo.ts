@@ -10,7 +10,7 @@ export const github = {
 	},
 	scene: [
 		{
-			label: 'bottom',
+			label: 'Bottom',
 			type: 'sphere',
 			center: [0.0, -99.5, -19],
 			radius: 100,
@@ -20,7 +20,7 @@ export const github = {
 			},
 		},
 		{
-			label: 'center',
+			label: 'Center',
 			type: 'sphere',
 			center: [0.0, 0.0, 0.0],
 			radius: 1.0,
@@ -30,7 +30,7 @@ export const github = {
 			},
 		},
 		{
-			label: 'left',
+			label: 'Left',
 			type: 'sphere',
 			center: [-1.01, 0.12, -2.3],
 			radius: 1,
@@ -40,7 +40,7 @@ export const github = {
 			},
 		},
 		{
-			label: 'right',
+			label: 'Right',
 			type: 'sphere',
 			center: [1.01, 0.12, -2.3],
 			radius: 1.0,
@@ -51,7 +51,7 @@ export const github = {
 			},
 		},
 		{
-			label: 'left small',
+			label: 'Left Small',
 			type: 'sphere',
 			center: [-1.6, -0.8, 0.3],
 			radius: 0.6,
@@ -62,7 +62,7 @@ export const github = {
 			},
 		},
 		{
-			label: 'right small',
+			label: 'Right Small',
 			type: 'sphere',
 			center: [1.6, -0.8, 0.3],
 			radius: 0.6,
@@ -73,7 +73,7 @@ export const github = {
 			},
 		},
 		{
-			label: 'front',
+			label: 'Front',
 			type: 'sphere',
 			center: [0, -1.05, 1.6],
 			radius: 0.6,

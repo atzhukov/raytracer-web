@@ -5,20 +5,24 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card'
-import {Pencil, Radius, Trash2} from 'lucide-react'
+import {Pencil, Trash2} from 'lucide-react'
 import {Button} from '@/components/ui/button'
 import {ButtonGroup} from '@/components/ui/button-group'
+import {SceneObject} from '@/lib/render/render'
+import properties from '@/lib/objects'
 
-export default function SceneObject() {
+export default function SceneObjectCard({
+	object,
+}: Readonly<{object: SceneObject}>) {
 	return (
 		<Card className='py-3'>
 			<CardHeader className='px-3'>
 				<CardTitle className='flex gap-2 items-center'>
-					<Radius size={16} />
-					Label
+					{properties(object).icon}
+					{object.label}
 				</CardTitle>
 				<CardDescription className='mt-[-6]'>
-					Metal Sphere at (0, 0, 0) with radius 1
+					{properties(object).description}
 				</CardDescription>
 				<CardAction className='inline'>
 					<ButtonGroup>

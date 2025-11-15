@@ -23,14 +23,18 @@ export type CameraSpec = {
  * An object of a scene.
  * At the moment, only spheres are supported.
  */
-export type SceneObject = {
-	type: 'sphere'
-	center: Vec3
-	radius: number
-} & {
+export type SceneObject = _Sphere & {
 	label?: string
 	material: Material
 }
+type _Sphere = {
+	type: 'sphere'
+	center: Vec3
+	radius: number
+}
+
+export type SceneObjectType = SceneObject['type']
+export type SphereObject = Extract<SceneObject, {type: 'sphere'}>
 
 /**
  * A material of an object.
