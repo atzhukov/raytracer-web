@@ -46,8 +46,8 @@ export function SceneSection() {
 						variant='outline'
 						size='sm'
 						className={
-							'focus-visible:ring-0 focus-visible:ring-offset-0 bg-red-50 hover:bg-red-100 ' +
-							'border-red-200'
+							'focus-visible:ring-0 focus-visible:ring-offset-0 ' +
+							'bg-red-50 hover:bg-red-100 border-red-200'
 						}
 						disabled={scene.length == 0}
 						onClick={clearScene}

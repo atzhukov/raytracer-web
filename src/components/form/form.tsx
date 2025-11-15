@@ -2,8 +2,8 @@
 
 import {Button} from '@/components/ui/button'
 import {FolderGit2, Play} from 'lucide-react'
-import {useCamera} from '@/lib/store'
-import {SyntheticEvent, useState} from 'react'
+import useConfiguration, {useCamera} from '@/lib/store'
+import {useState} from 'react'
 import {Switch} from '@/components/ui/switch'
 import {Label} from '@/components/ui/label'
 import {Separator} from '@/components/ui/separator'
@@ -21,6 +21,8 @@ import {ConfigurationSections} from '@/components/form/section'
 export default function Form() {
 	const [live, setLive] = useState(true)
 	const {camera, updateCamera, flushCamera} = useCamera(live)
+
+	const {scene} = useConfiguration()
 
 	return (
 		<form className='h-full'>
@@ -41,7 +43,10 @@ export default function Form() {
 				<CardFooter>
 					<div className='w-[100%] flex justify-between'>
 						<LiveSwitch checked={live} onChange={setLive} />
-						<RenderButton disabled={live} onClick={flushCamera} />
+						<RenderButton
+							disabled={live || scene.length == 0}
+							onClick={flushCamera}
+						/>
 					</div>
 				</CardFooter>
 			</Card>
@@ -89,16 +94,13 @@ function RenderButton({
 	disabled,
 	onClick,
 }: Readonly<{disabled: boolean; onClick: () => void}>) {
-	const onClickPreventingDefault = (e: SyntheticEvent) => {
-		e.preventDefault()
-		onClick()
-	}
 	return (
 		<Button
 			variant='outline'
 			size='sm'
 			disabled={disabled}
-			onClick={onClickPreventingDefault}
+			onClick={onClick}
+			preventDefault
 		>
 			<Play /> Render
 		</Button>
