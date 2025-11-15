@@ -8,12 +8,11 @@ import {
 import {Pencil, Trash2} from 'lucide-react'
 import {Button} from '@/components/ui/button'
 import {ButtonGroup} from '@/components/ui/button-group'
-import {SceneObject} from '@/lib/render/render'
-import properties from '@/lib/objects'
+import properties, {SceneObjectAny} from '@/lib/objects'
 
 export default function SceneObjectCard({
 	object,
-}: Readonly<{object: SceneObject}>) {
+}: Readonly<{object: SceneObjectAny}>) {
 	return (
 		<Card className='py-3'>
 			<CardHeader className='px-3'>

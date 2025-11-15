@@ -17,9 +17,9 @@ import {
 } from '@/components/ui/dropdown-menu'
 import {Button} from '@/components/ui/button'
 import useConfiguration from '@/lib/store'
-import {SceneObject} from '@/lib/render/render'
 import {supportedObjects} from '@/lib/objects'
 import {capitalize} from '@/lib/utils'
+import {Scene} from '@/lib/render/render'
 
 export function ConfigurationSections(props: Readonly<CameraFieldProps>) {
 	return (
@@ -69,7 +69,7 @@ export function SceneSection() {
 	)
 }
 
-function SceneObjectsList({scene}: Readonly<{scene: SceneObject[]}>) {
+function SceneObjectsList({scene}: Readonly<{scene: Scene}>) {
 	return (
 		<div className='flex flex-col gap-2'>
 			{scene.map((object) => (

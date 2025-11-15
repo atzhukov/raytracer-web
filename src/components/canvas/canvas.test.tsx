@@ -2,8 +2,9 @@ import {expect, describe, it, vi, beforeEach} from 'vitest'
 import {render as browserRender} from 'vitest-browser-react'
 import Canvas from '@/components/canvas/canvas'
 import {page} from 'vitest/browser'
-import render, {CameraSpec, SceneObject} from '@/lib/render/render'
+import render, {CameraSpec} from '@/lib/render/render'
 import {useConfigurationStore} from '@/lib/store'
+import {SceneObject} from '@/lib/objects'
 
 vi.mock(import('@/lib/render/render'), () => {
 	return {
@@ -19,7 +20,7 @@ const cameraSpec: CameraSpec = {
 	focusDistance: 1,
 }
 
-const sphere: SceneObject = {
+const sphere: SceneObject<'sphere'> = {
 	label: 'test sphere',
 	type: 'sphere',
 	center: [0, 0, 0],

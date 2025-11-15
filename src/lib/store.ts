@@ -1,14 +1,15 @@
 import {create} from 'zustand'
-import {CameraSpec, RaytracerInput, SceneObject} from '@/lib/render/render'
+import {CameraSpec, RaytracerInput, Scene} from '@/lib/render/render'
 import {github} from './demo'
 import {useDebouncedCallback} from 'use-debounce'
 import {useReducer} from 'react'
+import {SceneObjectAny} from './objects'
 
 interface ConfigurationStore {
 	cameraSpec: CameraSpec
-	scene: SceneObject[]
+	scene: Scene
 	setCameraSpec: (spec: Partial<CameraSpec>) => void
-	addSceneObject: (object: SceneObject) => void
+	addSceneObject: (object: SceneObjectAny) => void
 }
 
 export const useConfigurationStore = create<ConfigurationStore>((set) => ({

@@ -1,16 +1,13 @@
+import {SceneObjectAny} from '@/lib/objects'
 import {RequestMessage, ResponseMessage} from './worker'
 
-/**
- * The input type for the WASM raytracer module.
- */
+/*** The input type for the WASM raytracer module. */
 export type RaytracerInput = {
 	camera: CameraSpec
-	scene: SceneObject[]
+	scene: Scene
 }
 
-/**
- * The camera configuration.
- */
+/*** The camera configuration. */
 export type CameraSpec = {
 	fov: number
 	source: Vec3
@@ -19,31 +16,11 @@ export type CameraSpec = {
 	focusDistance: number
 }
 
-/**
- * An object of a scene.
- * At the moment, only spheres are supported.
- */
-export type SceneObject = _Sphere & {
-	label?: string
-	material: Material
-}
-type _Sphere = {
-	type: 'sphere'
-	center: Vec3
-	radius: number
-}
+/** The scene to be rendered. */
+export type Scene = SceneObjectAny[]
 
-export type SceneObjectType = SceneObject['type']
-export type SceneObjectConcrete<T extends SceneObjectType> = Extract<
-	SceneObject,
-	{type: T}
->
-export type SphereObject = SceneObjectConcrete<'sphere'>
-
-/**
- * A material of an object.
- */
-type Material =
+/** A material of an object. */
+export type Material =
 	| {
 			type: 'matte'
 			color: Vec3
