@@ -1,4 +1,4 @@
-import {Camera, ImageIcon, Plus, Radius, Trash2} from 'lucide-react'
+import {Camera, ImageIcon, Plus, Trash2} from 'lucide-react'
 import {
 	Accordion,
 	AccordionContent,
@@ -17,6 +17,9 @@ import {
 } from '@/components/ui/dropdown-menu'
 import {Button} from '@/components/ui/button'
 import useConfiguration from '@/lib/store'
+import {SceneObject} from '@/lib/render/render'
+import {supportedObjects} from '@/lib/objects'
+import {capitalize} from '@/lib/utils'
 
 export function ConfigurationSections(props: Readonly<CameraFieldProps>) {
 	return (
@@ -41,13 +44,14 @@ export function CameraSection(props: Readonly<CameraFieldProps>) {
 }
 
 export function SceneSection() {
+	const {scene} = useConfiguration()
 	return (
 		<AccordionItem value='scene'>
 			<AccordionTrigger icon={<ImageIcon size={16} />}>Scene</AccordionTrigger>
 			<AccordionContent>
-				<SceneObjectsList />
+				<SceneObjectsList scene={scene} />
 				<div className='mt-2 flex justify-between'>
-					<AddSceneDropdownMenu />
+					<AddToSceneDropdownMenu />
 					<Button
 						variant='outline'
 						size='sm'
@@ -65,8 +69,7 @@ export function SceneSection() {
 	)
 }
 
-function SceneObjectsList() {
-	const {scene} = useConfiguration()
+function SceneObjectsList({scene}: Readonly<{scene: SceneObject[]}>) {
 	return (
 		<div className='flex flex-col gap-2'>
 			{scene.map((object) => (
@@ -76,7 +79,7 @@ function SceneObjectsList() {
 	)
 }
 
-function AddSceneDropdownMenu() {
+function AddToSceneDropdownMenu() {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
@@ -90,14 +93,26 @@ function AddSceneDropdownMenu() {
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent>
-				<DropdownMenuItem>
-					<Radius />
-					Sphere
-				</DropdownMenuItem>
+				<ObjectTypeDropdownMenuItems />
 				<DropdownMenuSeparator />
 				<DropdownMenuLabel>Presets</DropdownMenuLabel>
 				<DropdownMenuItem>GitHub Demo</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>
+	)
+}
+
+function ObjectTypeDropdownMenuItems() {
+	return (
+		<>
+			{Object.entries(supportedObjects).map(([type, config]) => {
+				return (
+					<DropdownMenuItem key={type}>
+						{config.icon}
+						{capitalize(type)}
+					</DropdownMenuItem>
+				)
+			})}
+		</>
 	)
 }

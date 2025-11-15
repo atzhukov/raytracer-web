@@ -34,7 +34,11 @@ type _Sphere = {
 }
 
 export type SceneObjectType = SceneObject['type']
-export type SphereObject = Extract<SceneObject, {type: 'sphere'}>
+export type SceneObjectConcrete<T extends SceneObjectType> = Extract<
+	SceneObject,
+	{type: T}
+>
+export type SphereObject = SceneObjectConcrete<'sphere'>
 
 /**
  * A material of an object.
