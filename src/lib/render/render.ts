@@ -1,5 +1,6 @@
 import {SceneObjectAny} from '@/lib/objects'
 import {RequestMessage, ResponseMessage} from './worker'
+import {workerManager} from './manager'
 
 /*** The input type for the WASM raytracer module. */
 export type RaytracerInput = {
@@ -51,14 +52,16 @@ export default async function render(
 	height: number
 ): Promise<ImageData> {
 	return new Promise((resolve, reject) => {
-		const worker = new Worker(new URL('./worker.ts', import.meta.url))
+		const worker = workerManager.createNew()
 
 		worker.onmessage = (event: MessageEvent<ResponseMessage>) => {
 			if (event.data.tag == 'success') {
 				const pixels = event.data.pixels as ImageDataArray
 				const imageData = new ImageData(pixels, width, height)
+				workerManager.finished()
 				resolve(imageData)
 			} else if (event.data.tag == 'error') {
+				workerManager.finished()
 				reject(new Error(event.data.message))
 			}
 		}
