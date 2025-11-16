@@ -10,12 +10,11 @@ import {
 	DialogFooter,
 	DialogContent,
 	DialogTitle,
-	DialogDescription,
 } from '../ui/dialog'
 import {FieldSet, FieldGroup} from '../ui/field'
 import {InputGroup, InputGroupInput} from '../ui/input-group'
 import {useConfigurationStore} from '@/lib/store'
-import {DialogClose} from '@radix-ui/react-dialog'
+import {DialogClose, DialogDescription} from '@radix-ui/react-dialog'
 import MaterialPicker from './material'
 import {FieldSkeleton} from '../ui/wrap/field'
 
@@ -61,33 +60,34 @@ export default function SphereDialogContent({
 	}
 
 	return (
-		<DialogContent>
+		<DialogContent className='max-h-[90vh] overflow-y-scroll'>
 			<DialogHeader>
-				<DialogTitle className='mb-4'>Add Sphere</DialogTitle>
-				<DialogDescription asChild>
-					<FieldSet>
-						<FieldGroup>
-							<LabelField
-								value={sphere.label}
-								error={errors.label}
-								onChange={(v) => updateSphere({label: v})}
-							/>
-							<CenterField
-								value={sphere.center}
-								onChange={(v) => updateSphere({center: v})}
-							/>
-							<RadiusField
-								value={sphere.radius}
-								onChange={(v) => updateSphere({radius: v})}
-							/>
-							<MaterialPicker
-								value={sphere.material}
-								onChange={(v) => updateSphere({material: v})}
-							/>
-						</FieldGroup>
-					</FieldSet>
+				<DialogTitle>Add Sphere</DialogTitle>
+				<DialogDescription className='sr-only'>
+					Configure a sphere to add to the scene.
 				</DialogDescription>
 			</DialogHeader>
+			<FieldSet>
+				<FieldGroup>
+					<LabelField
+						value={sphere.label}
+						error={errors.label}
+						onChange={(v) => updateSphere({label: v})}
+					/>
+					<CenterField
+						value={sphere.center}
+						onChange={(v) => updateSphere({center: v})}
+					/>
+					<RadiusField
+						value={sphere.radius}
+						onChange={(v) => updateSphere({radius: v})}
+					/>
+					<MaterialPicker
+						value={sphere.material}
+						onChange={(v) => updateSphere({material: v})}
+					/>
+				</FieldGroup>
+			</FieldSet>
 			<DialogFooter>
 				<DialogClose asChild>
 					<Button
