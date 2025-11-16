@@ -22,7 +22,7 @@ export default function CoordinateInput({
 
 	useEffect(() => {
 		onChange?.([-x, y, z])
-	}, [x, y, z])
+	}, [onChange, x, y, z])
 
 	return (
 		<div className='flex gap-2'>

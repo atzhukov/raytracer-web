@@ -58,6 +58,10 @@ export default function SphereDialogContent({
 		onSave(sphere)
 	}
 
+	const updateCenter = useCallback(
+		(center: Vec3) => updateSphere({center}),
+		[updateSphere]
+	)
 	const updateRadius = useCallback(
 		(radius: number) => updateSphere({radius}),
 		[updateSphere]
@@ -78,10 +82,7 @@ export default function SphereDialogContent({
 						error={errors.label}
 						onChange={(v) => updateSphere({label: v})}
 					/>
-					<CenterField
-						value={sphere.center}
-						onChange={(v) => updateSphere({center: v})}
-					/>
+					<CenterField value={sphere.center} onChange={updateCenter} />
 					<RadiusField value={sphere.radius} onChange={updateRadius} />
 					<MaterialPicker
 						value={sphere.material}
@@ -143,6 +144,7 @@ function CenterField({
 	value,
 	onChange,
 }: Readonly<{value: Vec3; onChange: (value: Vec3) => void}>) {
+	const onChangeMemoized = useCallback((v: Vec3) => onChange(v), [onChange])
 	return (
 		<FieldSkeleton
 			id='center'
@@ -150,7 +152,7 @@ function CenterField({
 			label='Center'
 			description='The point where the center of the sphere is located.'
 		>
-			<CoordinateInput values={value} onChange={(v) => onChange(v)} />
+			<CoordinateInput values={value} onChange={onChangeMemoized} />
 		</FieldSkeleton>
 	)
 }
