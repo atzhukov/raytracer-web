@@ -25,7 +25,7 @@ export default function SliderWithDisplay(
 	}, 200)
 	useEffect(() => {
 		onChangeDebounced()
-	}, [value])
+	}, [onChangeDebounced, value])
 
 	return (
 		<div className='flex gap-2 align-center items-center'>
