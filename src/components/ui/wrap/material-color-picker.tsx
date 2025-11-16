@@ -16,6 +16,9 @@ export default function MaterialColorPicker({
 	)
 
 	const onChangeConverting = (hex: string) => {
+		if (hex.length != 7) {
+			return
+		}
 		const rgb = hexToRgb(hex)
 		onChange([rgb.r / 255, rgb.g / 255, rgb.b / 255])
 	}
