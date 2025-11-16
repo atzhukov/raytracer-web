@@ -17,6 +17,7 @@ import {capitalize} from '@/lib/utils'
 import {useEffect, useState} from 'react'
 import {Field, FieldDescription, FieldLabel} from '@/components/ui/field'
 import SliderWithDisplay from '@/components/ui/wrap/slider-display'
+import MaterialColorPicker from '../ui/wrap/material-color-picker'
 
 export default function MaterialPicker({
 	value,
@@ -35,7 +36,7 @@ export default function MaterialPicker({
 	return (
 		<>
 			<Skeleton id='material' icon={<Origami size={16} />} label='Material'>
-				<Select onValueChange={changeType}>
+				<Select value={material.type} onValueChange={changeType}>
 					<SelectTrigger className='w-[180px]'>
 						<SelectValue placeholder='Choose a material' />
 					</SelectTrigger>
@@ -49,7 +50,9 @@ export default function MaterialPicker({
 				</Select>
 			</Skeleton>
 			<div>
-				{material.type == 'matte' && <MatteFields />}
+				{material.type == 'matte' && (
+					<MatteFields material={material} onChange={setMaterial} />
+				)}
 				{material.type == 'dielectric' && (
 					<DielectricFields material={material} onChange={setMaterial} />
 				)}
@@ -58,13 +61,21 @@ export default function MaterialPicker({
 	)
 }
 
-function MatteFields() {
+function MatteFields({
+	material,
+	onChange,
+}: Readonly<{
+	material: MaterialOf<'matte'>
+	onChange: (material: MaterialOf<'matte'>) => void
+}>) {
 	return (
 		<Field>
-			<FieldLabel htmlFor='input-id'>Label</FieldLabel>
-			{/* Input, Select, Switch, etc. */}
-			{/* <FieldDescription>Optional helper text.</FieldDescription>
-			<FieldError>Validation message.</FieldError> */}
+			<Field id='color'>
+				<MaterialColorPicker
+					color={material.color}
+					onChange={(color) => onChange({...material, color})}
+				/>
+			</Field>
 		</Field>
 	)
 }
@@ -76,7 +87,6 @@ function DielectricFields({
 	material: MaterialOf<'dielectric'>
 	onChange: (material: MaterialOf<'dielectric'>) => void
 }>) {
-	console.log(material)
 	return (
 		<Field id='refractive-index'>
 			<FieldLabel htmlFor='refractive-index'>Refractive Index</FieldLabel>
@@ -98,3 +108,5 @@ function DielectricFields({
 }
 
 function MetalFields() {}
+
+
