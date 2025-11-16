@@ -31,7 +31,7 @@ export default function MaterialPicker({
 
 	useEffect(() => {
 		onChange(material)
-	}, [material])
+	}, [onChange, material])
 
 	return (
 		<>
