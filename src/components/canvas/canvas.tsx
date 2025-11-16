@@ -7,7 +7,7 @@ import {
 	EmptyMedia,
 	EmptyTitle,
 } from '@/components/ui/empty'
-import render, {RaytracerInput} from '@/lib/render/render'
+import render from '@/lib/render/render'
 import {Loader, Settings, TriangleAlert} from 'lucide-react'
 import {JSX, useEffect, useReducer, useRef} from 'react'
 import progress from './state'
@@ -31,12 +31,7 @@ export default function Canvas(props: Readonly<CanvasProps>) {
 	// Re-render the image and set state.imageData when the props change
 	useEffect(() => {
 		async function getImageData() {
-			const input: RaytracerInput = {
-				camera: configuration.camera,
-				scene: configuration.scene,
-			} // eslint
-
-			if (input.scene.length == 0) {
+			if (configuration.scene.length == 0) {
 				transition({to: 'empty'})
 				return
 			}
@@ -45,7 +40,8 @@ export default function Canvas(props: Readonly<CanvasProps>) {
 				transition({to: 'working'})
 				const ratio = window.devicePixelRatio || 1
 				const imageData = await render(
-					input,
+					configuration.camera,
+					configuration.scene,
 					props.width * ratio,
 					props.height * ratio
 				)

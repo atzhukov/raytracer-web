@@ -1,4 +1,4 @@
-import {CameraSpec} from '@/lib/render/render'
+import {Camera} from '@/lib/render/render'
 import {
 	Field,
 	FieldDescription,
@@ -14,8 +14,8 @@ import CoordinateInput from './coordinateInput'
 const iconSize = '16'
 
 export type CameraFieldProps = {
-	camera: CameraSpec
-	onChange: (changes: Partial<CameraSpec>) => void
+	camera: Camera
+	onChange: (changes: Partial<Camera>) => void
 }
 
 export default function CameraFieldSet(props: Readonly<CameraFieldProps>) {

@@ -2,14 +2,8 @@ import {SceneObjectAny} from '@/lib/objects'
 import {RequestMessage, ResponseMessage} from './worker'
 import {workerManager} from './manager'
 
-/*** The input type for the WASM raytracer module. */
-export type RaytracerInput = {
-	camera: CameraSpec
-	scene: Scene
-}
-
 /*** The camera configuration. */
-export type CameraSpec = {
+export type Camera = {
 	fov: number
 	source: Vec3
 	target: Vec3
@@ -47,7 +41,8 @@ export type Vec3 = [number, number, number]
  * @returns a promise containing the image data.
  */
 export default async function render(
-	input: RaytracerInput,
+	camera: Camera,
+	scene: Scene,
 	width: number,
 	height: number
 ): Promise<ImageData> {
@@ -66,6 +61,6 @@ export default async function render(
 			}
 		}
 
-		worker.postMessage({input, width, height} satisfies RequestMessage)
+		worker.postMessage({camera, scene, width, height} satisfies RequestMessage)
 	})
 }

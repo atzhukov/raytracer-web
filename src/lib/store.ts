@@ -1,40 +1,42 @@
 import {create} from 'zustand'
-import {CameraSpec, Scene} from '@/lib/render/render'
+import {Camera, Scene} from '@/lib/render/render'
 import {github} from './demo'
 import {useDebouncedCallback} from 'use-debounce'
 import {useReducer} from 'react'
 import {SceneObjectAny} from './objects'
 
 interface ConfigurationStore {
-	cameraSpec: CameraSpec
+	camera: Camera
+	updateCamera: (changes: Partial<Camera>) => void
+
 	scene: Scene
-	setCameraSpec: (spec: Partial<CameraSpec>) => void
 	addSceneObject: (object: SceneObjectAny) => void
 	removeSceneObject: (object: SceneObjectAny) => void
 	clearScene: () => void
 }
 
 export const useConfigurationStore = create<ConfigurationStore>((set) => ({
-	cameraSpec: github.camera,
-	scene: github.scene,
-	setCameraSpec: (spec) =>
+	camera: github.camera,
+	updateCamera: (changes) =>
 		set((state) => ({
-			cameraSpec: {...state.cameraSpec, ...spec},
+			camera: {...state.camera, ...changes},
 			scene: state.scene,
 		})),
+
+	scene: github.scene,
 	addSceneObject: (object) =>
 		set((state) => ({
-			cameraSpec: state.cameraSpec,
+			camera: state.camera,
 			scene: [...state.scene, object],
 		})),
 	removeSceneObject: (object) =>
 		set((state) => ({
-			cameraSpec: state.cameraSpec,
+			camera: state.camera,
 			scene: state.scene.filter((currentObject) => currentObject != object),
 		})),
 	clearScene: () =>
 		set((state) => ({
-			cameraSpec: state.cameraSpec,
+			camera: state.camera,
 			scene: [],
 		})),
 }))
@@ -45,7 +47,7 @@ export const useConfigurationStore = create<ConfigurationStore>((set) => ({
  */
 export default function useConfiguration() {
 	return {
-		camera: useConfigurationStore((state) => state.cameraSpec),
+		camera: useConfigurationStore((state) => state.camera),
 		scene: useConfigurationStore((state) => state.scene),
 		removeSceneObject: useConfigurationStore(
 			(state) => state.removeSceneObject
@@ -62,18 +64,18 @@ export default function useConfiguration() {
  * @returns an object containing the current camera state and functions to change state.
  */
 export function useCamera(live = false) {
-	const initialCamera = useConfigurationStore.getState().cameraSpec
-	const updateCamera = useConfigurationStore((state) => state.setCameraSpec)
+	const initialCamera = useConfigurationStore.getState().camera
+	const updateCamera = useConfigurationStore((state) => state.updateCamera)
 
 	// Keep a local camera spec object and debounce changes to the configuration store,
 	// so that the UI updates immediately but ray tracing only starts after a delay
 	const updateGlobalCameraDebounced = useDebouncedCallback(
-		(newState: CameraSpec) => updateCamera(newState),
+		(newState: Camera) => updateCamera(newState),
 		500
 	)
 	const [localCamera, updateLocalCamera] = useReducer(
-		(state: CameraSpec, changes: Partial<CameraSpec>) => {
-			const newState: CameraSpec = {...state, ...changes}
+		(state: Camera, changes: Partial<Camera>) => {
+			const newState: Camera = {...state, ...changes}
 			if (live) {
 				updateGlobalCameraDebounced(newState)
 			}
