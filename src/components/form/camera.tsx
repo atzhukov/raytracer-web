@@ -37,7 +37,7 @@ function FieldOfViewField({camera, onChange}: Readonly<CameraFieldProps>) {
 			<SliderWithDisplay
 				id={id}
 				value={camera.fov}
-				displayValue={`${camera.fov}°`}
+				displayValue={(v) => `${v}°`}
 				onChange={(v) => onChange({fov: v})}
 				min={1}
 				max={100}
