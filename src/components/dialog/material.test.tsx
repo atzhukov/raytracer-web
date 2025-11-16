@@ -58,7 +58,7 @@ describe('material picker', () => {
 		}
 
 		const callbacks = {
-			onChange: (material: Material) => {},
+			onChange: () => {},
 		}
 		const onChangeSpy = vi.spyOn(callbacks, 'onChange')
 
