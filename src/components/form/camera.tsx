@@ -4,6 +4,8 @@ import {Aperture, Focus, Move3d, ScanEye} from 'lucide-react'
 import SliderWithDisplay from '@/components/ui/wrap/slider-display'
 import {FieldSkeleton} from '../ui/wrap/field'
 import CoordinateInput from '../ui/wrap/coordinateInput'
+import {useCallback} from 'react'
+import {Vec3} from '@/lib/utils'
 
 const iconSize = '16'
 
@@ -93,6 +95,10 @@ function FocusDistanceField({camera, onChange}: Readonly<CameraFieldProps>) {
 }
 
 function SourceField({camera, onChange}: Readonly<CameraFieldProps>) {
+	const onChangeMemoized = useCallback(
+		(v: Vec3) => onChange({source: v}),
+		[onChange]
+	)
 	return (
 		<FieldSkeleton
 			id='source'
@@ -100,10 +106,7 @@ function SourceField({camera, onChange}: Readonly<CameraFieldProps>) {
 			label='Location'
 			description='The point where the camera is located.'
 		>
-			<CoordinateInput
-				values={camera.source}
-				onChange={(v) => onChange({source: v})}
-			/>
+			<CoordinateInput values={camera.source} onChange={onChangeMemoized} />
 		</FieldSkeleton>
 	)
 }

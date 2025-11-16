@@ -12,12 +12,6 @@ type CoordinateInputProps = {
 	onChange?: (value: Vec3) => void
 }
 
-type Coordinate = {
-	x: number | ''
-	y: number | ''
-	z: number | ''
-}
-
 export default function CoordinateInput({
 	values,
 	onChange,
@@ -27,10 +21,7 @@ export default function CoordinateInput({
 	const [z, setZ] = useState(values[2])
 
 	useEffect(() => {
-		if (!onChange) {
-			return
-		}
-		onChange([-x, y, z])
+		onChange?.([-x, y, z])
 	}, [x, y, z])
 
 	return (
@@ -48,7 +39,7 @@ function CoordinateInputField({
 	onChange,
 }: Readonly<{
 	value: number | ''
-	label: keyof Coordinate
+	label: 'x' | 'y' | 'z'
 	onChange: (value: number) => void
 }>) {
 	const [valueString, setValueString] = useState(value.toString())
@@ -57,7 +48,7 @@ function CoordinateInputField({
 			onChange(0)
 		}
 		onChange(Number.parseFloat(valueString))
-	}, [valueString])
+	}, [onChange, valueString])
 
 	const upperLabel = label.toUpperCase()
 	return (

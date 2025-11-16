@@ -1,6 +1,6 @@
 import {config, SceneObject, SceneObjectAny} from '@/lib/objects'
 import {Tag, Move3d, RulerDimensionLine} from 'lucide-react'
-import {useEffect, useReducer, useState} from 'react'
+import {useCallback, useEffect, useReducer, useState} from 'react'
 import {Button} from '../ui/button'
 import {
 	DialogHeader,
@@ -58,6 +58,11 @@ export default function SphereDialogContent({
 		onSave(sphere)
 	}
 
+	const updateRadius = useCallback(
+		(radius: number) => updateSphere({radius}),
+		[updateSphere]
+	)
+
 	return (
 		<DialogContent className='max-h-[90vh] overflow-y-scroll'>
 			<DialogHeader>
@@ -77,10 +82,7 @@ export default function SphereDialogContent({
 						value={sphere.center}
 						onChange={(v) => updateSphere({center: v})}
 					/>
-					<RadiusField
-						value={sphere.radius}
-						onChange={(v) => updateSphere({radius: v})}
-					/>
+					<RadiusField value={sphere.radius} onChange={updateRadius} />
 					<MaterialPicker
 						value={sphere.material}
 						onChange={(v) => updateSphere({material: v})}
@@ -161,11 +163,12 @@ function RadiusField({
 
 	const [stringValue, setStringValue] = useState(value.toString())
 	useEffect(() => {
-		if (!stringValue) {
+		if (stringValue) {
+			onChange(Number.parseFloat(stringValue))
+		} else {
 			onChange(0)
 		}
-		onChange(Number.parseFloat(stringValue))
-	}, [stringValue])
+	}, [onChange, stringValue])
 
 	return (
 		<FieldSkeleton
