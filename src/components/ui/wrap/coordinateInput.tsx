@@ -5,6 +5,7 @@ import {
 	InputGroupAddon,
 } from '@/components/ui/input-group'
 import {Vec3} from '@/lib/utils'
+import {useEffect, useState} from 'react'
 
 type CoordinateInputProps = {
 	values: Vec3
@@ -21,40 +22,22 @@ export default function CoordinateInput({
 	values,
 	onChange,
 }: Readonly<CoordinateInputProps>) {
-	function emitChange(changedIndex: 0 | 1 | 2, newValue: number) {
+	const [x, setX] = useState(-values[0])
+	const [y, setY] = useState(values[1])
+	const [z, setZ] = useState(values[2])
+
+	useEffect(() => {
 		if (!onChange) {
 			return
 		}
-		const updatedCoordinates: Vec3 = [...values]
-		updatedCoordinates[changedIndex] = newValue || 0
-		onChange(updatedCoordinates)
-	}
-
-	// Display coordinates with string keys, so that input can be erased
-	// (using numbers with undefined causes controlled => uncontrolled input errors)
-	const coordinate: Coordinate = {
-		x: values[0] == 0 ? '' : values[0],
-		y: values[1] == 0 ? '' : values[1],
-		z: values[2] == 0 ? '' : values[2],
-	}
+		onChange([-x, y, z])
+	}, [x, y, z])
 
 	return (
 		<div className='flex gap-2'>
-			<CoordinateInputField
-				value={coordinate.x}
-				label='x'
-				onChange={(v) => emitChange(0, v)}
-			/>
-			<CoordinateInputField
-				value={coordinate.y}
-				label='y'
-				onChange={(v) => emitChange(1, v)}
-			/>
-			<CoordinateInputField
-				value={coordinate.z}
-				label='z'
-				onChange={(v) => emitChange(2, v)}
-			/>
+			<CoordinateInputField value={x} label='x' onChange={setX} />
+			<CoordinateInputField value={y} label='y' onChange={setY} />
+			<CoordinateInputField value={z} label='z' onChange={setZ} />
 		</div>
 	)
 }
@@ -68,15 +51,23 @@ function CoordinateInputField({
 	label: keyof Coordinate
 	onChange: (value: number) => void
 }>) {
+	const [valueString, setValueString] = useState(value.toString())
+	useEffect(() => {
+		if (!valueString) {
+			onChange(0)
+		}
+		onChange(Number.parseFloat(valueString))
+	}, [valueString])
+
 	const upperLabel = label.toUpperCase()
 	return (
 		<InputGroup>
 			<InputGroupInput
 				id={label}
-				value={value}
+				value={valueString}
 				type='number'
 				placeholder='0'
-				onChange={(e) => onChange(+e.target.value)}
+				onChange={(e) => setValueString(e.target.value)}
 				className='placeholder:text-foreground'
 				aria-label={`The ${upperLabel} coordinate`}
 			/>

@@ -1,9 +1,9 @@
 import {Camera} from '@/lib/render/render'
 import {FieldGroup, FieldSet} from '@/components/ui/field'
 import {Aperture, Focus, Move3d, ScanEye} from 'lucide-react'
-import CoordinateInput from './coordinateInput'
 import SliderWithDisplay from '@/components/ui/wrap/slider-display'
 import {FieldSkeleton} from '../ui/wrap/field'
+import CoordinateInput from '../ui/wrap/coordinateInput'
 
 const iconSize = '16'
 
