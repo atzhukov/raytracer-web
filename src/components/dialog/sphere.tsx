@@ -1,6 +1,6 @@
 import {config, SceneObject, SceneObjectAny} from '@/lib/objects'
 import {Tag, Move3d, RulerDimensionLine} from 'lucide-react'
-import {useReducer, useState} from 'react'
+import {useEffect, useReducer, useState} from 'react'
 import CoordinateInput from '../form/coordinateInput'
 import {Button} from '../ui/button'
 import {
@@ -126,6 +126,7 @@ function LabelField({
 				<InputGroupInput
 					id={id}
 					value={value}
+					placeholder='Middle'
 					aria-label={`The label for the sphere`}
 					onChange={(e) => onChange(e.target.value)}
 					required
@@ -157,6 +158,15 @@ function RadiusField({
 	onChange,
 }: Readonly<{value: number; onChange: (value: number) => void}>) {
 	const id = 'radius'
+
+	const [stringValue, setStringValue] = useState(value.toString())
+	useEffect(() => {
+		if (!stringValue) {
+			onChange(0)
+		}
+		onChange(Number.parseFloat(stringValue))
+	}, [stringValue])
+
 	return (
 		<FieldSkeleton
 			id={id}
@@ -167,11 +177,11 @@ function RadiusField({
 			<InputGroup>
 				<InputGroupInput
 					id={id}
-					value={value}
+					value={stringValue}
 					type='number'
 					placeholder='0'
 					aria-label={`The radius of the sphere`}
-					onChange={(e) => onChange(+e.target.value)}
+					onChange={(e) => setStringValue(e.target.value)}
 				/>
 			</InputGroup>
 		</FieldSkeleton>
