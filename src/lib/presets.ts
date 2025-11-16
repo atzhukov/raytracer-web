@@ -3,8 +3,8 @@ import {Camera, Scene} from './render/render'
 export const github = {
 	camera: {
 		fov: 27.0,
-		source: [0.0, 0.35, 10.0],
-		target: [0.0, -0.35, 0.0],
+		source: [0.0, 0, -10.0],
+		target: [0.0, 0, 0.0],
 		aperture: 0.0,
 		focusDistance: 10.0,
 	},
@@ -12,7 +12,7 @@ export const github = {
 		{
 			label: 'Bottom',
 			type: 'sphere',
-			center: [0.0, -99.5, -19],
+			center: [0.0, -99.5, 19],
 			radius: 100,
 			material: {
 				type: 'matte',
@@ -32,7 +32,7 @@ export const github = {
 		{
 			label: 'Left',
 			type: 'sphere',
-			center: [-1.01, 0.12, -2.3],
+			center: [-1.01, 0.12, 2.3],
 			radius: 1,
 			material: {
 				type: 'matte',
@@ -42,7 +42,7 @@ export const github = {
 		{
 			label: 'Right',
 			type: 'sphere',
-			center: [1.01, 0.12, -2.3],
+			center: [1.01, 0.12, 2.3],
 			radius: 1.0,
 			material: {
 				type: 'metal',
@@ -53,7 +53,7 @@ export const github = {
 		{
 			label: 'Left Small',
 			type: 'sphere',
-			center: [-1.6, -0.8, 0.3],
+			center: [-1.6, -0.8, -0.3],
 			radius: 0.6,
 			material: {
 				type: 'metal',
@@ -64,7 +64,7 @@ export const github = {
 		{
 			label: 'Right Small',
 			type: 'sphere',
-			center: [1.6, -0.8, 0.3],
+			center: [1.6, -0.8, -0.3],
 			radius: 0.6,
 			material: {
 				type: 'metal',
@@ -75,7 +75,7 @@ export const github = {
 		{
 			label: 'Front',
 			type: 'sphere',
-			center: [0, -1.05, 1.6],
+			center: [0, -1.05, -1.6],
 			radius: 0.6,
 			material: {
 				type: 'matte',
