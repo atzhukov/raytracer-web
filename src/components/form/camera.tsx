@@ -69,7 +69,7 @@ function ApertureField({camera, onChange}: Readonly<CameraFieldProps>) {
 				onChange={(v) => onChange({aperture: v})}
 				min={0}
 				max={50}
-				step={0.5}
+				step={0.1}
 				ariaLabel='Depth of Field'
 			/>
 		</Skeleton>
@@ -89,9 +89,9 @@ function FocusDistanceField({camera, onChange}: Readonly<CameraFieldProps>) {
 				id={id}
 				value={camera.focusDistance}
 				onChange={(v) => onChange({focusDistance: v})}
-				min={0.5}
+				min={0.1}
 				max={50}
-				step={0.5}
+				step={0.1}
 				ariaLabel='Focus Distance'
 			/>
 		</Skeleton>

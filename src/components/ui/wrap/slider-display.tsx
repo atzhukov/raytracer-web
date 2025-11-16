@@ -25,7 +25,7 @@ export default function SliderWithDisplay(
 				role='slider'
 				aria-label={props.ariaLabel}
 			/>
-			<span className='w-[2em] text-right'>
+			<span className='w-[2.5em] text-right'>
 				{props.displayValue || props.value}
 			</span>
 		</div>
