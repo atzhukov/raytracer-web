@@ -1,13 +1,13 @@
 import {describe, expect, it, vi} from 'vitest'
 import {render} from 'vitest-browser-react'
 import MaterialPicker from './material'
-import {Material, materialTypes} from '@/lib/render/render'
 import {page} from 'vitest/browser'
 import {capitalize} from '@/lib/utils'
+import {MaterialAny, materialTypes} from '@/lib/materials'
 
 describe('material picker', () => {
 	it('should include available materials', async () => {
-		const material: Material = {type: 'dielectric', ridx: 0.67}
+		const material: MaterialAny = {type: 'dielectric', ridx: 0.67}
 
 		const result = await render(
 			<MaterialPicker value={material} onChange={vi.fn()} />
@@ -17,14 +17,14 @@ describe('material picker', () => {
 		const dropdown = screen.getByRole('combobox')
 		await dropdown.click()
 
-		for (const type of materialTypes) {
+		for (const type of materialTypes()) {
 			const option = screen.getByRole('option', {name: capitalize(type)!})
 			expect(option).toBeVisible()
 		}
 	})
 
 	it('should include color picker for matte', async () => {
-		const material: Material = {type: 'matte', color: [0.4, 0.5, 0.6]}
+		const material: MaterialAny = {type: 'matte', color: [0.4, 0.5, 0.6]}
 
 		const result = await render(
 			<MaterialPicker value={material} onChange={vi.fn()} />
@@ -36,7 +36,7 @@ describe('material picker', () => {
 	})
 
 	it('should include color picker for metal', async () => {
-		const material: Material = {
+		const material: MaterialAny = {
 			type: 'metal',
 			color: [0.4, 0.5, 0.6],
 			fuzz: 0.3,
@@ -52,7 +52,7 @@ describe('material picker', () => {
 	})
 
 	it('should call onChange callback when changes occur', async () => {
-		const material: Material = {
+		const material: MaterialAny = {
 			type: 'matte',
 			color: [0.4, 0.5, 0.6],
 		}

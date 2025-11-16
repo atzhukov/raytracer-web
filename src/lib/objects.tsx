@@ -1,13 +1,14 @@
 import {Radius} from 'lucide-react'
 import {capitalize} from '@/lib/utils'
-import {Material, Vec3} from '@/lib/render/render'
+import {Vec3} from '@/lib/render/render'
+import {initialMaterials, MaterialAny} from './materials'
 
 // MARK: - Supported Scene Objects
 
 /** An object of a scene. */
 export type SceneObjectAny = _Sphere & {
 	label?: string
-	material: Material
+	material: MaterialAny
 }
 type _Sphere = {
 	type: 'sphere'
@@ -37,7 +38,7 @@ export const supportedObjects: SupportedObjectTypeConfigs = {
 			type: 'sphere',
 			center: [0, 0, 0],
 			radius: 1,
-			material: {type: 'metal', color: [0.0039, 0.5725, 0.5333], fuzz: 0},
+			material: initialMaterials.metal(),
 		}),
 	},
 }

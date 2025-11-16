@@ -6,27 +6,28 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select'
-import {
-	initialMaterials,
-	Material,
-	MaterialOf,
-	materialTypes,
-} from '@/lib/render/render'
 import {capitalize} from '@/lib/utils'
 import {useCallback, useEffect, useState} from 'react'
 import {FieldSet} from '@/components/ui/field'
 import SliderWithDisplay from '@/components/ui/wrap/slider-display'
 import MaterialColorPicker from '../ui/wrap/material-color-picker'
 import {FieldSkeleton} from '../ui/wrap/field'
+import {
+	initialMaterials,
+	Material,
+	MaterialAny,
+	MaterialType,
+	materialTypes,
+} from '@/lib/materials'
 
 export default function MaterialPicker({
 	value,
 	onChange,
-}: Readonly<{value: Material; onChange: (value: Material) => void}>) {
+}: Readonly<{value: MaterialAny; onChange: (value: MaterialAny) => void}>) {
 	const [material, setMaterial] = useState(value)
 
 	const changeType = (type: string) => {
-		setMaterial(initialMaterials[type as Material['type']])
+		setMaterial(initialMaterials[type as MaterialType])
 	}
 
 	// Cache onChange to prevent infinite re-renders
@@ -52,7 +53,7 @@ export default function MaterialPicker({
 						<SelectValue placeholder='Choose a material' />
 					</SelectTrigger>
 					<SelectContent>
-						{materialTypes.map((type) => (
+						{materialTypes().map((type) => (
 							<SelectItem key={type} value={type}>
 								<span className='text-foreground'>{capitalize(type)}</span>
 							</SelectItem>
@@ -79,8 +80,8 @@ function MatteFields({
 	material,
 	onChange,
 }: Readonly<{
-	material: MaterialOf<'matte'>
-	onChange: (material: MaterialOf<'matte'>) => void
+	material: Material<'matte'>
+	onChange: (material: Material<'matte'>) => void
 }>) {
 	return (
 		<FieldSkeleton
@@ -101,8 +102,8 @@ function DielectricFields({
 	material,
 	onChange,
 }: Readonly<{
-	material: MaterialOf<'dielectric'>
-	onChange: (material: MaterialOf<'dielectric'>) => void
+	material: Material<'dielectric'>
+	onChange: (material: Material<'dielectric'>) => void
 }>) {
 	const id = 'refractive-index'
 	const description =
@@ -132,8 +133,8 @@ function MetalFields({
 	material,
 	onChange,
 }: Readonly<{
-	material: MaterialOf<'metal'>
-	onChange: (material: MaterialOf<'metal'>) => void
+	material: Material<'metal'>
+	onChange: (material: Material<'metal'>) => void
 }>) {
 	return (
 		<FieldSet>
