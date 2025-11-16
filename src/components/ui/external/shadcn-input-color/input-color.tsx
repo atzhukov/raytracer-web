@@ -40,7 +40,7 @@ interface ColorPickerProps {
 	onChange: (value: string) => void
 	onBlur?: () => void
 	isLoading?: boolean
-	label: string
+	label?: string
 	icon?: React.ReactNode
 	error?: string
 	className?: string
@@ -309,9 +309,11 @@ export default function InputColor({
 
 	return (
 		<div className={cn(className)}>
-			<Label className='mb-3 text-foreground'>
-				{icon} {label}
-			</Label>
+			{label && (
+				<Label className='mb-3 text-foreground'>
+					{icon} {label}
+				</Label>
+			)}
 			<div className='flex items-center gap-2'>
 				<Popover onOpenChange={handlePopoverChange}>
 					<PopoverTrigger asChild>
@@ -361,7 +363,7 @@ export default function InputColor({
 									/>
 								)}
 							</div>
-							<div className='flex gap-2'>
+							<div className='hidden'>
 								<Select value={colorFormat} onValueChange={setColorFormat}>
 									<SelectTrigger className='!h-7 !w-[4.8rem] rounded-sm px-2 py-1 !text-sm'>
 										<SelectValue placeholder='Color' />

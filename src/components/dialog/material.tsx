@@ -1,4 +1,4 @@
-import {FlipVertical2, Origami} from 'lucide-react'
+import {Activity, FlipVertical2, Origami, Palette} from 'lucide-react'
 import {
 	Select,
 	SelectContent,
@@ -14,7 +14,7 @@ import {
 } from '@/lib/render/render'
 import {capitalize} from '@/lib/utils'
 import {useCallback, useEffect, useState} from 'react'
-import {Field} from '@/components/ui/field'
+import {FieldSet} from '@/components/ui/field'
 import SliderWithDisplay from '@/components/ui/wrap/slider-display'
 import MaterialColorPicker from '../ui/wrap/material-color-picker'
 import {FieldSkeleton} from '../ui/wrap/field'
@@ -63,6 +63,9 @@ export default function MaterialPicker({
 				{material.type == 'dielectric' && (
 					<DielectricFields material={material} onChange={setMaterial} />
 				)}
+				{material.type == 'metal' && (
+					<MetalFields material={material} onChange={setMaterial} />
+				)}
 			</div>
 		</>
 	)
@@ -76,14 +79,17 @@ function MatteFields({
 	onChange: (material: MaterialOf<'matte'>) => void
 }>) {
 	return (
-		<Field>
-			<Field id='color'>
-				<MaterialColorPicker
-					color={material.color}
-					onChange={(color) => onChange({...material, color})}
-				/>
-			</Field>
-		</Field>
+		<FieldSkeleton
+			id='color'
+			icon={<Palette size={16} />}
+			label='Color'
+			description='The color of the matte material.'
+		>
+			<MaterialColorPicker
+				color={material.color}
+				onChange={(color) => onChange({...material, color})}
+			/>
+		</FieldSkeleton>
 	)
 }
 
@@ -118,4 +124,43 @@ function DielectricFields({
 	)
 }
 
-function MetalFields() {}
+function MetalFields({
+	material,
+	onChange,
+}: Readonly<{
+	material: MaterialOf<'metal'>
+	onChange: (material: MaterialOf<'metal'>) => void
+}>) {
+	return (
+		<FieldSet>
+			<FieldSkeleton
+				id='color-metal'
+				icon={<Palette size={16} />}
+				label='Color'
+				description='The color of the metal.'
+			>
+				<MaterialColorPicker
+					color={material.color}
+					onChange={(color) => onChange({...material, color})}
+				/>
+			</FieldSkeleton>
+
+			<FieldSkeleton
+				id='fuzz'
+				icon={<Activity size={16} />}
+				label='Fuzz'
+				description='The roughness of the metal surface.'
+			>
+				<SliderWithDisplay
+					id='fuzz'
+					value={material.fuzz}
+					min={0}
+					max={1}
+					step={0.01}
+					onChange={(fuzz) => onChange({...material, fuzz})}
+					ariaLabel='The fuzziness of metal'
+				/>
+			</FieldSkeleton>
+		</FieldSet>
+	)
+}

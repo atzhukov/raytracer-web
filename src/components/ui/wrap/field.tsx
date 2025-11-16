@@ -3,7 +3,7 @@ import {Field, FieldDescription, FieldError, FieldLabel} from '../field'
 type FieldSkeletonProps = {
 	id?: string
 	icon?: React.ReactNode
-	label: string
+	label?: string
 	children: React.ReactNode
 	description?: string
 	error?: string

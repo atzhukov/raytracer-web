@@ -23,11 +23,9 @@ export default function MaterialColorPicker({
 
 	return (
 		<InputColor
-			label='Color'
-			icon={<Palette size={16} />}
 			value={hex}
 			onChange={onChangeConverting}
-			className='mt-0'
+			className='mt-0 text-foreground'
 		/>
 	)
 }
