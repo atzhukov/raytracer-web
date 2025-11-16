@@ -1,4 +1,4 @@
-import {Vec3} from './render/render'
+import {Vec3} from './utils'
 
 /** A material of an object. */
 export type MaterialAny = _Matte | _Dielectric | _Metal

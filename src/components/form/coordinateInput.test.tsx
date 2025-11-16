@@ -1,8 +1,8 @@
-import {Vec3} from '@/lib/render/render'
 import {describe, expect, it, vi} from 'vitest'
 import {render as browserRender} from 'vitest-browser-react'
 import {page} from 'vitest/browser'
 import CoordinateInput from './coordinateInput'
+import {Vec3} from '@/lib/utils'
 
 describe('CoordinateInput', () => {
 	it('should call onChange callback with correct values', async () => {

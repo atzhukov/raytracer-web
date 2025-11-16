@@ -1,6 +1,4 @@
 import {config, SceneObject, SceneObjectAny} from '@/lib/objects'
-import {Vec3} from '@/lib/render/render'
-
 import {Tag, Move3d, RulerDimensionLine} from 'lucide-react'
 import {useReducer, useState} from 'react'
 import CoordinateInput from '../form/coordinateInput'
@@ -17,6 +15,7 @@ import {useConfigurationStore} from '@/lib/store'
 import {DialogClose, DialogDescription} from '@radix-ui/react-dialog'
 import MaterialPicker from './material'
 import {FieldSkeleton} from '../ui/wrap/field'
+import {Vec3} from '@/lib/utils'
 
 export default function SphereDialogContent({
 	editingSphere,

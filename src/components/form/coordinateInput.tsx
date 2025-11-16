@@ -4,7 +4,7 @@ import {
 	InputGroupInput,
 	InputGroupAddon,
 } from '@/components/ui/input-group'
-import {Vec3} from '@/lib/render/render'
+import {Vec3} from '@/lib/utils'
 
 type CoordinateInputProps = {
 	values: Vec3

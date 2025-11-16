@@ -1,8 +1,9 @@
 import {SceneObjectAny} from '@/lib/objects'
 import {RequestMessage, ResponseMessage} from './worker'
 import {workerManager} from './manager'
+import {Vec3} from '../utils'
 
-/*** The camera configuration. */
+/** The camera configuration. */
 export type Camera = {
 	fov: number
 	source: Vec3
@@ -14,10 +15,7 @@ export type Camera = {
 /** The scene to be rendered. */
 export type Scene = SceneObjectAny[]
 
-/**
- * A vector of three numeric values.
- */
-export type Vec3 = [number, number, number]
+
 
 /**
  * Renders a specified scene using the WASM raytracer module.

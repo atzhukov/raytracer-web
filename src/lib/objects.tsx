@@ -1,6 +1,5 @@
 import {Radius} from 'lucide-react'
-import {capitalize} from '@/lib/utils'
-import {Vec3} from '@/lib/render/render'
+import {capitalize, Vec3} from '@/lib/utils'
 import {initialMaterials, MaterialAny} from './materials'
 
 // MARK: - Supported Scene Objects
