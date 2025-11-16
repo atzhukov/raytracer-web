@@ -17,6 +17,7 @@ import {FieldSet, FieldGroup} from '../ui/field'
 import {InputGroup, InputGroupInput} from '../ui/input-group'
 import {useConfigurationStore} from '@/lib/store'
 import {DialogClose} from '@radix-ui/react-dialog'
+import MaterialPicker from './material'
 
 export default function SphereDialogContent({
 	editingSphere,
@@ -78,6 +79,10 @@ export default function SphereDialogContent({
 							<RadiusField
 								value={sphere.radius}
 								onChange={(v) => updateSphere({radius: v})}
+							/>
+							<MaterialPicker
+								value={sphere.material}
+								onChange={(v) => updateSphere({material: v})}
 							/>
 						</FieldGroup>
 					</FieldSet>

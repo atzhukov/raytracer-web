@@ -8,8 +8,8 @@ import {
 	FieldSet,
 } from '@/components/ui/field'
 import {Aperture, Focus, Move3d, ScanEye} from 'lucide-react'
-import {Slider} from '@/components/ui/slider'
 import CoordinateInput from './coordinateInput'
+import SliderWithDisplay from '@/components/ui/wrap/slider-display'
 
 const iconSize = '16'
 
@@ -40,7 +40,7 @@ function FieldOfViewField({camera, onChange}: Readonly<CameraFieldProps>) {
 			label='Field of View'
 			description='The vertical angle visible in the rendered image.'
 		>
-			<CameraSlider
+			<SliderWithDisplay
 				id={id}
 				value={camera.fov}
 				displayValue={`${camera.fov}°`}
@@ -63,7 +63,7 @@ function ApertureField({camera, onChange}: Readonly<CameraFieldProps>) {
 			label='Depth of Field'
 			description='The blurriness of objects that are out of focus.'
 		>
-			<CameraSlider
+			<SliderWithDisplay
 				id={id}
 				value={camera.aperture}
 				onChange={(v) => onChange({aperture: v})}
@@ -85,7 +85,7 @@ function FocusDistanceField({camera, onChange}: Readonly<CameraFieldProps>) {
 			label='Focus Distance'
 			description='The distance from the camera to the object in focus.'
 		>
-			<CameraSlider
+			<SliderWithDisplay
 				id={id}
 				value={camera.focusDistance}
 				onChange={(v) => onChange({focusDistance: v})}
@@ -111,36 +111,6 @@ function SourceField({camera, onChange}: Readonly<CameraFieldProps>) {
 				onChange={(v) => onChange({source: v})}
 			/>
 		</Skeleton>
-	)
-}
-
-type CameraSliderProps = {
-	id: string
-	value: number
-	displayValue?: string
-	onChange: (value: number) => void
-	ariaLabel: string
-	min: number
-	max: number
-	step: number
-}
-function CameraSlider(props: Readonly<CameraSliderProps>) {
-	return (
-		<div className='flex gap-2 align-center items-center'>
-			<Slider
-				id={props.id}
-				value={[props.value]}
-				onValueChange={(v) => props.onChange(v[0])}
-				min={props.min}
-				max={props.max}
-				step={props.step}
-				role='slider'
-				aria-label={props.ariaLabel}
-			/>
-			<span className='w-[2em] text-right'>
-				{props.displayValue || props.value}
-			</span>
-		</div>
 	)
 }
 
