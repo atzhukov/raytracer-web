@@ -18,12 +18,16 @@ import {FieldSet} from '@/components/ui/field'
 import SliderWithDisplay from '@/components/ui/wrap/slider-display'
 import MaterialColorPicker from '../ui/wrap/material-color-picker'
 import {FieldSkeleton} from '../ui/wrap/field'
+import {useDebounce} from 'use-debounce'
 
 export default function MaterialPicker({
 	value,
 	onChange,
 }: Readonly<{value: Material; onChange: (value: Material) => void}>) {
+	// Keep a slightly debounced value to call onChange with
+	// to improve performance when using sliders
 	const [material, setMaterial] = useState(value)
+	const [materialDebounced] = useDebounce(material, 200)
 
 	const changeType = (type: string) => {
 		setMaterial(initialMaterials[type as Material['type']])
@@ -34,8 +38,8 @@ export default function MaterialPicker({
 	const onChangeCached = useCallback(onChange, [value])
 	// Call onChange when material changes
 	useEffect(() => {
-		onChangeCached(material)
-	}, [onChangeCached, material])
+		onChangeCached(materialDebounced)
+	}, [onChangeCached, materialDebounced])
 
 	return (
 		<>
