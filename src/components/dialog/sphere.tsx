@@ -90,6 +90,7 @@ export default function SphereDialogContent({
 						variant='outline'
 						onClick={onSaveValidating}
 						preventDefault
+						aria-label='Save sphere'
 					>
 						Add
 					</Button>

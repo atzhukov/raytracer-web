@@ -154,7 +154,7 @@ type SkeletonProps = {
 }
 export function Skeleton(props: Readonly<SkeletonProps>) {
 	return (
-		<Field data-invalid={!!props.error}>
+		<Field id={props.id} data-invalid={!!props.error}>
 			<FieldLabel
 				className='flex items-center gap-2 text-foreground'
 				htmlFor={props.id}
