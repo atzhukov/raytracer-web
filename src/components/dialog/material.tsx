@@ -14,7 +14,7 @@ import {
 	materialTypes,
 } from '@/lib/render/render'
 import {capitalize} from '@/lib/utils'
-import {useEffect, useState} from 'react'
+import {useCallback, useEffect, useState} from 'react'
 import {Field, FieldDescription, FieldLabel} from '@/components/ui/field'
 import SliderWithDisplay from '@/components/ui/wrap/slider-display'
 import MaterialColorPicker from '../ui/wrap/material-color-picker'
@@ -29,9 +29,12 @@ export default function MaterialPicker({
 		setMaterial(initialMaterials[type as Material['type']])
 	}
 
+	// Cache onChange to prevent infinite re-renders
+	// Call onChange when material changes
+	const onChangeCached = useCallback(onChange, [value])
 	useEffect(() => {
-		onChange(material)
-	}, [onChange, material])
+		onChangeCached(material)
+	}, [onChangeCached, material])
 
 	return (
 		<>
