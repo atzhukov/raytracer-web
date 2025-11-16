@@ -1,4 +1,4 @@
-import {RaytracerInput} from '@/lib/render/render'
+import {Camera, Scene} from './render/render'
 
 export const github = {
 	camera: {
@@ -83,4 +83,4 @@ export const github = {
 			},
 		},
 	],
-} satisfies RaytracerInput
+} satisfies {camera: Camera; scene: Scene}

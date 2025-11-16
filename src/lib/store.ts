@@ -1,6 +1,6 @@
 import {create} from 'zustand'
 import {Camera, Scene} from '@/lib/render/render'
-import {github} from './demo'
+import {github} from './presets'
 import {useDebouncedCallback} from 'use-debounce'
 import {useReducer} from 'react'
 import {SceneObjectAny} from './objects'

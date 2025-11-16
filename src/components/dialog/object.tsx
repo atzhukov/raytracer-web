@@ -50,9 +50,6 @@ function AddToSceneDropdownMenu({
 			</DropdownMenuTrigger>
 			<DropdownMenuContent>
 				<ObjectTypeDropdownMenuItems onClick={onClick} />
-				<DropdownMenuSeparator />
-				<DropdownMenuLabel>Presets</DropdownMenuLabel>
-				<DropdownMenuItem>GitHub Demo</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>
 	)
