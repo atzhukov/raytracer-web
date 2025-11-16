@@ -4,6 +4,7 @@ import {github} from './presets'
 import {useDebouncedCallback} from 'use-debounce'
 import {useReducer} from 'react'
 import {SceneObjectAny} from './objects'
+import equal from 'fast-deep-equal'
 
 interface ConfigurationStore {
 	camera: Camera
@@ -18,10 +19,17 @@ interface ConfigurationStore {
 export const useConfigurationStore = create<ConfigurationStore>((set) => ({
 	camera: github.camera,
 	updateCamera: (changes) =>
-		set((state) => ({
-			camera: {...state.camera, ...changes},
-			scene: state.scene,
-		})),
+		set((state) => {
+			const newCamera = {...state.camera, ...changes}
+			// Refuse update if new state is unchanged to save some re-renders
+			if (equal(state.camera, newCamera)) {
+				return state
+			}
+			return {
+				camera: newCamera,
+				scene: state.scene,
+			}
+		}),
 
 	scene: github.scene,
 	addSceneObject: (object) =>
