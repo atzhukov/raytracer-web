@@ -4,7 +4,6 @@ import {
 	rgbToHex,
 } from '../external/shadcn-input-color/color-converter'
 import InputColor from '../external/shadcn-input-color/input-color'
-import {Palette} from 'lucide-react'
 
 export default function MaterialColorPicker({
 	color,

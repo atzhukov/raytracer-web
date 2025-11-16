@@ -30,8 +30,9 @@ export default function MaterialPicker({
 	}
 
 	// Cache onChange to prevent infinite re-renders
-	// Call onChange when material changes
+	/* eslint-disable-next-line react-hooks/exhaustive-deps */
 	const onChangeCached = useCallback(onChange, [value])
+	// Call onChange when material changes
 	useEffect(() => {
 		onChangeCached(material)
 	}, [onChangeCached, material])
