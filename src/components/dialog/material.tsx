@@ -45,7 +45,10 @@ export default function MaterialPicker({
 				label='Material'
 			>
 				<Select value={material.type} onValueChange={changeType}>
-					<SelectTrigger className='w-[180px]'>
+					<SelectTrigger
+						className='w-[180px]'
+						aria-label='Select from list of materials'
+					>
 						<SelectValue placeholder='Choose a material' />
 					</SelectTrigger>
 					<SelectContent>

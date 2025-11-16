@@ -316,7 +316,7 @@ export default function InputColor({
 			)}
 			<div className='flex items-center gap-2'>
 				<Popover onOpenChange={handlePopoverChange}>
-					<PopoverTrigger asChild>
+					<PopoverTrigger aria-label='Color Picker Popover' asChild>
 						<Button
 							className='border-border border shadow-none relative overflow-hidden'
 							size={'icon'}
@@ -526,6 +526,7 @@ export default function InputColor({
 						onChange={(e) => handleHexChange(e.target.value)}
 						onBlur={onBlur}
 						className={`uppercase ${error ? 'border-destructive' : ''}`}
+						aria-label='Current color hex value'
 					/>
 					{isLoading && (
 						<span className='absolute inset-y-0 right-0 flex items-center pr-4'>
