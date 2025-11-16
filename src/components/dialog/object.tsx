@@ -14,6 +14,28 @@ import SphereDialogContent from './sphere'
 import {useState} from 'react'
 import {useConfigurationStore} from '@/lib/store'
 
+export function EditDialogContent({
+	object,
+}: Readonly<{object: SceneObjectAny}>) {
+	if (!object.label) {
+		throw new Error('Editing an object requires a label')
+	}
+
+	const updateSceneObject = useConfigurationStore(
+		(state) => state.updateSceneObject
+	)
+	return (
+		<>
+			{object.type == 'sphere' && (
+				<SphereDialogContent
+					editingSphere={object}
+					onSave={(newObject) => updateSceneObject(object.label!, newObject)}
+				/>
+			)}
+		</>
+	)
+}
+
 export function AddObjectDropdownMenu() {
 	const addSceneObject = useConfigurationStore((state) => state.addSceneObject)
 	const [type, setType] = useState<SceneObjectType | null>(null)

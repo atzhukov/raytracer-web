@@ -12,6 +12,7 @@ interface ConfigurationStore {
 
 	scene: Scene
 	addSceneObject: (object: SceneObjectAny) => void
+	updateSceneObject: (label: string, newObject: SceneObjectAny) => void
 	removeSceneObject: (object: SceneObjectAny) => void
 	clearScene: () => void
 }
@@ -37,6 +38,16 @@ export const useConfigurationStore = create<ConfigurationStore>((set) => ({
 			camera: state.camera,
 			scene: [...state.scene, object],
 		})),
+	updateSceneObject: (label, newObject) =>
+		set((state) => {
+			const newScene = [...state.scene]
+			const index = newScene.findIndex((object) => object.label == label)
+			newScene[index] = newObject
+			return {
+				camera: state.camera,
+				scene: newScene,
+			}
+		}),
 	removeSceneObject: (object) =>
 		set((state) => ({
 			camera: state.camera,

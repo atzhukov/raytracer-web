@@ -10,6 +10,9 @@ import {
 	CardTitle,
 } from '@/components/ui/card'
 import {ButtonGroup} from '../ui/button-group'
+import {Dialog} from '../ui/dialog'
+import {DialogTrigger} from '@radix-ui/react-dialog'
+import {EditDialogContent} from '../dialog/object'
 
 export default function SceneObjectsList({
 	scene,
@@ -50,9 +53,14 @@ function SceneObjectCard({
 				</CardDescription>
 				<CardAction className='inline'>
 					<ButtonGroup>
-						<Button variant='outline' size='icon-sm' aria-label='Submit'>
-							<Pencil />
-						</Button>
+						<Dialog>
+							<DialogTrigger asChild>
+								<Button variant='outline' size='icon-sm' aria-label='Submit'>
+									<Pencil />
+								</Button>
+							</DialogTrigger>
+							<EditDialogContent object={object} />
+						</Dialog>
 						<Button
 							variant='outline'
 							size='icon-sm'
