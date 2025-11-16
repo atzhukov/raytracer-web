@@ -3,7 +3,6 @@ import {Vec3} from '@/lib/render/render'
 
 import {Tag, Move3d, RulerDimensionLine} from 'lucide-react'
 import {useReducer, useState} from 'react'
-import {Skeleton} from '../form/camera'
 import CoordinateInput from '../form/coordinateInput'
 import {Button} from '../ui/button'
 import {
@@ -18,6 +17,7 @@ import {InputGroup, InputGroupInput} from '../ui/input-group'
 import {useConfigurationStore} from '@/lib/store'
 import {DialogClose} from '@radix-ui/react-dialog'
 import MaterialPicker from './material'
+import {FieldSkeleton} from '../ui/wrap/field'
 
 export default function SphereDialogContent({
 	editingSphere,
@@ -116,11 +116,11 @@ function LabelField({
 }>) {
 	const id = 'label'
 	return (
-		<Skeleton
+		<FieldSkeleton
 			id={id}
 			icon={<Tag size={16} />}
 			label='Label'
-			description='A name for this sphere.'
+			description='A unique name for this sphere.'
 			error={error}
 		>
 			<InputGroup aria-invalid>
@@ -133,7 +133,7 @@ function LabelField({
 					aria-invalid={!!error}
 				/>
 			</InputGroup>
-		</Skeleton>
+		</FieldSkeleton>
 	)
 }
 
@@ -142,14 +142,14 @@ function CenterField({
 	onChange,
 }: Readonly<{value: Vec3; onChange: (value: Vec3) => void}>) {
 	return (
-		<Skeleton
+		<FieldSkeleton
 			id='center'
 			icon={<Move3d size={16} />}
 			label='Center'
 			description='The point where the center of the sphere is located.'
 		>
 			<CoordinateInput values={value} onChange={(v) => onChange(v)} />
-		</Skeleton>
+		</FieldSkeleton>
 	)
 }
 
@@ -159,7 +159,7 @@ function RadiusField({
 }: Readonly<{value: number; onChange: (value: number) => void}>) {
 	const id = 'radius'
 	return (
-		<Skeleton
+		<FieldSkeleton
 			id={id}
 			icon={<RulerDimensionLine size={16} />}
 			label='Radius'
@@ -175,6 +175,6 @@ function RadiusField({
 					onChange={(e) => onChange(+e.target.value)}
 				/>
 			</InputGroup>
-		</Skeleton>
+		</FieldSkeleton>
 	)
 }

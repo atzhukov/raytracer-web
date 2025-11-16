@@ -1,15 +1,9 @@
 import {Camera} from '@/lib/render/render'
-import {
-	Field,
-	FieldDescription,
-	FieldError,
-	FieldGroup,
-	FieldLabel,
-	FieldSet,
-} from '@/components/ui/field'
+import {FieldGroup, FieldSet} from '@/components/ui/field'
 import {Aperture, Focus, Move3d, ScanEye} from 'lucide-react'
 import CoordinateInput from './coordinateInput'
 import SliderWithDisplay from '@/components/ui/wrap/slider-display'
+import {FieldSkeleton} from '../ui/wrap/field'
 
 const iconSize = '16'
 
@@ -34,7 +28,7 @@ export default function CameraFieldSet(props: Readonly<CameraFieldProps>) {
 function FieldOfViewField({camera, onChange}: Readonly<CameraFieldProps>) {
 	const id = 'fov'
 	return (
-		<Skeleton
+		<FieldSkeleton
 			id={id}
 			icon={<ScanEye size={iconSize} />}
 			label='Field of View'
@@ -50,14 +44,14 @@ function FieldOfViewField({camera, onChange}: Readonly<CameraFieldProps>) {
 				step={1}
 				ariaLabel='Field of View'
 			/>
-		</Skeleton>
+		</FieldSkeleton>
 	)
 }
 
 function ApertureField({camera, onChange}: Readonly<CameraFieldProps>) {
 	const id = 'aperture'
 	return (
-		<Skeleton
+		<FieldSkeleton
 			id={id}
 			icon={<Aperture size={iconSize} />}
 			label='Depth of Field'
@@ -72,14 +66,14 @@ function ApertureField({camera, onChange}: Readonly<CameraFieldProps>) {
 				step={0.1}
 				ariaLabel='Depth of Field'
 			/>
-		</Skeleton>
+		</FieldSkeleton>
 	)
 }
 
 function FocusDistanceField({camera, onChange}: Readonly<CameraFieldProps>) {
 	const id = 'focus-distance'
 	return (
-		<Skeleton
+		<FieldSkeleton
 			id={id}
 			icon={<Focus size={iconSize} />}
 			label='Focus Distance'
@@ -94,13 +88,13 @@ function FocusDistanceField({camera, onChange}: Readonly<CameraFieldProps>) {
 				step={0.1}
 				ariaLabel='Focus Distance'
 			/>
-		</Skeleton>
+		</FieldSkeleton>
 	)
 }
 
 function SourceField({camera, onChange}: Readonly<CameraFieldProps>) {
 	return (
-		<Skeleton
+		<FieldSkeleton
 			id='source'
 			icon={<Move3d size={iconSize} />}
 			label='Location'
@@ -110,33 +104,8 @@ function SourceField({camera, onChange}: Readonly<CameraFieldProps>) {
 				values={camera.source}
 				onChange={(v) => onChange({source: v})}
 			/>
-		</Skeleton>
+		</FieldSkeleton>
 	)
 }
 
-type SkeletonProps = {
-	id?: string
-	icon?: React.ReactNode
-	label: string
-	children: React.ReactNode
-	description?: string
-	error?: string
-}
-export function Skeleton(props: Readonly<SkeletonProps>) {
-	return (
-		<Field id={props.id} data-invalid={!!props.error}>
-			<FieldLabel
-				className='flex items-center gap-2 text-foreground'
-				htmlFor={props.id}
-			>
-				{props.icon}
-				{props.label}
-			</FieldLabel>
-			{props.children}
-			<FieldError>{props.error}</FieldError>
-			{props.description && (
-				<FieldDescription>{props.description}</FieldDescription>
-			)}
-		</Field>
-	)
-}
+

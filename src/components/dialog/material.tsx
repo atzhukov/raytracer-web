@@ -1,5 +1,4 @@
-import {Origami} from 'lucide-react'
-import {Skeleton} from '@/components/form/camera'
+import {FlipVertical2, Origami} from 'lucide-react'
 import {
 	Select,
 	SelectContent,
@@ -15,9 +14,10 @@ import {
 } from '@/lib/render/render'
 import {capitalize} from '@/lib/utils'
 import {useCallback, useEffect, useState} from 'react'
-import {Field, FieldDescription, FieldLabel} from '@/components/ui/field'
+import {Field} from '@/components/ui/field'
 import SliderWithDisplay from '@/components/ui/wrap/slider-display'
 import MaterialColorPicker from '../ui/wrap/material-color-picker'
+import {FieldSkeleton} from '../ui/wrap/field'
 
 export default function MaterialPicker({
 	value,
@@ -38,7 +38,11 @@ export default function MaterialPicker({
 
 	return (
 		<>
-			<Skeleton id='material' icon={<Origami size={16} />} label='Material'>
+			<FieldSkeleton
+				id='material'
+				icon={<Origami size={16} />}
+				label='Material'
+			>
 				<Select value={material.type} onValueChange={changeType}>
 					<SelectTrigger className='w-[180px]'>
 						<SelectValue placeholder='Choose a material' />
@@ -46,12 +50,12 @@ export default function MaterialPicker({
 					<SelectContent>
 						{materialTypes.map((type) => (
 							<SelectItem key={type} value={type}>
-								{capitalize(type)}
+								<span className='text-foreground'>{capitalize(type)}</span>
 							</SelectItem>
 						))}
 					</SelectContent>
 				</Select>
-			</Skeleton>
+			</FieldSkeleton>
 			<div>
 				{material.type == 'matte' && (
 					<MatteFields material={material} onChange={setMaterial} />
@@ -90,11 +94,19 @@ function DielectricFields({
 	material: MaterialOf<'dielectric'>
 	onChange: (material: MaterialOf<'dielectric'>) => void
 }>) {
+	const id = 'refractive-index'
+	const description =
+		'For solid glass, choose 1.5. For hollow glass, additionally create a ' +
+		'slightly smaller object with refractive index of 0.67.'
 	return (
-		<Field id='refractive-index'>
-			<FieldLabel htmlFor='refractive-index'>Refractive Index</FieldLabel>
+		<FieldSkeleton
+			id={id}
+			icon={<FlipVertical2 size={16} />}
+			label='Refractive Index'
+			description={description}
+		>
 			<SliderWithDisplay
-				id='refractive-index'
+				id={id}
 				value={material.ridx}
 				min={0}
 				max={10}
@@ -102,14 +114,8 @@ function DielectricFields({
 				onChange={(v) => onChange({...material, ridx: v})}
 				ariaLabel='The refractive index'
 			/>
-			<FieldDescription>
-				For solid glass, choose 1.5. For hollow glass, additionally create a
-				slightly smaller object with refractive index of 0.67.
-			</FieldDescription>
-		</Field>
+		</FieldSkeleton>
 	)
 }
 
 function MetalFields() {}
-
-
