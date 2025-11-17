@@ -31,7 +31,7 @@ export const supportedObjects: SupportedObjectTypeConfigs = {
 		icon: <Radius size={16} />,
 		description: (sphere) =>
 			`${capitalize(sphere.material.type)} ${capitalize(sphere.type)} ` +
-			`at (${sphere.center[0]}, ${sphere.center[1]}, ${sphere.center[2]}) ` +
+			`at (${-sphere.center[0]}, ${sphere.center[1]}, ${sphere.center[2]}) ` +
 			`with radius ${sphere.radius}`,
 		initialValue: () => ({
 			type: 'sphere',
