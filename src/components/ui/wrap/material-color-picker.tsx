@@ -1,4 +1,4 @@
-import {Vec3} from '@/lib/render/render'
+import {Vec3} from '@/lib/utils'
 import {
 	hexToRgb,
 	rgbToHex,
