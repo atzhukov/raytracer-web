@@ -2,7 +2,6 @@
 
 import {Button} from '@/components/ui/button'
 import {FolderGit2, Play} from 'lucide-react'
-import useConfiguration, {useCamera} from '@/lib/store'
 import {useState} from 'react'
 import {Switch} from '@/components/ui/switch'
 import {Label} from '@/components/ui/label'
@@ -17,12 +16,14 @@ import {
 } from '@/components/ui/card'
 import Link from 'next/link'
 import {ConfigurationSections} from '@/components/form/section'
+import useCamera from '@/lib/hooks/camera'
+import {useConfigurationStore} from '@/lib/store'
 
 export default function Form() {
 	const [live, setLive] = useState(true)
 	const {camera, updateCamera, flushCamera} = useCamera(live)
 
-	const {scene} = useConfiguration()
+	const scene = useConfigurationStore((state) => state.scene)
 
 	return (
 		<form className='h-full'>

@@ -37,12 +37,13 @@ describe('canvas', () => {
 		useConfigurationStore.setState({
 			camera: camera,
 			scene: [],
+			dimensions: {width: 100, height: 50},
 		})
 		vi.clearAllMocks()
 	})
 
 	it('should display empty placeholder if no image is specified', async () => {
-		const result = await browserRender(<Canvas width={100} height={50} />)
+		const result = await browserRender(<Canvas />)
 		const screen = page.elementLocator(result.baseElement)
 
 		await expect
@@ -58,7 +59,7 @@ describe('canvas', () => {
 		const state = useConfigurationStore.getState()
 		state.addSceneObject(sphere)
 
-		const result = await browserRender(<Canvas width={100} height={50} />)
+		const result = await browserRender(<Canvas />)
 		const screen = page.elementLocator(result.baseElement)
 
 		await expect
@@ -76,7 +77,7 @@ describe('canvas', () => {
 		const state = useConfigurationStore.getState()
 		state.addSceneObject(sphere)
 
-		const result = await browserRender(<Canvas width={100} height={50} />)
+		const result = await browserRender(<Canvas />)
 		const screen = page.elementLocator(result.baseElement)
 
 		await expect

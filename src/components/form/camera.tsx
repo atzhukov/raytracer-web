@@ -111,4 +111,19 @@ function SourceField({camera, onChange}: Readonly<CameraFieldProps>) {
 	)
 }
 
-
+function SizeField({camera, onChange}: Readonly<CameraFieldProps>) {
+	const onChangeMemoized = useCallback(
+		(v: Vec3) => onChange({source: v}),
+		[onChange]
+	)
+	return (
+		<FieldSkeleton
+			id='source'
+			icon={<Move3d size={iconSize} />}
+			label='Location'
+			description='The point where the camera is located.'
+		>
+			<CoordinateInput values={camera.source} onChange={onChangeMemoized} />
+		</FieldSkeleton>
+	)
+}

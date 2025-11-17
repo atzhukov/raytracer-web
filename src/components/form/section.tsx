@@ -7,9 +7,9 @@ import {
 } from '@/components/ui/accordion'
 import CameraFieldSet, {CameraFieldProps} from './camera'
 import {Button} from '@/components/ui/button'
-import useConfiguration from '@/lib/store'
 import SceneObjectsList from './scene'
 import {AddObjectDropdownMenu} from '../dialog/object'
+import {useConfigurationStore} from '@/lib/store'
 
 export function ConfigurationSections(props: Readonly<CameraFieldProps>) {
 	return (
@@ -34,7 +34,11 @@ export function CameraSection(props: Readonly<CameraFieldProps>) {
 }
 
 export function SceneSection() {
-	const {scene, removeSceneObject, clearScene} = useConfiguration()
+	const scene = useConfigurationStore((state) => state.scene)
+	const removeSceneObject = useConfigurationStore(
+		(state) => state.removeSceneObject
+	)
+	const clearScene = useConfigurationStore((state) => state.clearScene)
 
 	return (
 		<AccordionItem value='scene'>
