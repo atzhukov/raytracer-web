@@ -70,7 +70,7 @@ export const useConfigurationStore = create<ConfigurationStore>((set) => ({
 			scene: [],
 		})),
 
-	dimensions: {width: 304, height: 171},
+	dimensions: {width: 300, height: 300},
 	setDimensions: (dimensions) =>
 		set((state) => ({
 			...state,
