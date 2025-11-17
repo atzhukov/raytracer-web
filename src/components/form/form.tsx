@@ -17,13 +17,26 @@ import {
 import Link from 'next/link'
 import {ConfigurationSections} from '@/components/form/section'
 import useCamera from '@/lib/hooks/camera'
-import {useConfigurationStore} from '@/lib/store'
+import {Dimensions, useConfigurationStore} from '@/lib/store'
+import {useDebouncedCallback} from 'use-debounce'
 
 export default function Form() {
 	const [live, setLive] = useState(true)
-	const {camera, updateCamera, flushCamera} = useCamera(live)
 
+	const {camera, updateCamera, flushCamera} = useCamera(live)
 	const scene = useConfigurationStore((state) => state.scene)
+
+	const dimensions = useConfigurationStore((state) => state.dimensions)
+	const setDimensions = useConfigurationStore((state) => state.setDimensions)
+	const setDimensionsDebounced = useDebouncedCallback(
+		(dimensions: Dimensions) => {
+			if (!live) {
+				return
+			}
+			setDimensions(dimensions)
+		},
+		500
+	)
 
 	return (
 		<form className='h-full'>
@@ -41,6 +54,8 @@ export default function Form() {
 					<ConfigurationSections
 						camera={camera}
 						onCameraChange={updateCamera}
+						dimensions={dimensions}
+						onDimensionsChange={setDimensionsDebounced}
 					/>
 					<Separator />
 				</CardContent>

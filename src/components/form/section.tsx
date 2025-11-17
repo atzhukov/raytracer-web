@@ -5,14 +5,15 @@ import {
 	AccordionItem,
 	AccordionTrigger,
 } from '@/components/ui/accordion'
-import CameraFieldSet, {CameraFieldProps} from './camera'
+import CameraFieldSet, {CameraFieldProps, SizeFieldProps} from './camera'
 import {Button} from '@/components/ui/button'
 import SceneObjectsList from './scene'
 import {AddObjectDropdownMenu} from '../dialog/object'
-import {Dimensions, useConfigurationStore} from '@/lib/store'
-import {useDebouncedCallback} from 'use-debounce'
+import {useConfigurationStore} from '@/lib/store'
 
-export function ConfigurationSections(props: Readonly<CameraFieldProps>) {
+export function ConfigurationSections(
+	props: Readonly<CameraFieldProps & SizeFieldProps>
+) {
 	return (
 		<Accordion type='single' defaultValue='scene' collapsible>
 			<CameraSection {...props} />
@@ -21,26 +22,16 @@ export function ConfigurationSections(props: Readonly<CameraFieldProps>) {
 	)
 }
 
-export function CameraSection(props: Readonly<CameraFieldProps>) {
-	const dimensions = useConfigurationStore((state) => state.dimensions)
-	const setDimensions = useConfigurationStore((state) => state.setDimensions)
-
-	const setDimensionsDebounced = useDebouncedCallback(
-		(dimensions: Dimensions) => setDimensions(dimensions),
-		500
-	)
-
+export function CameraSection(
+	props: Readonly<CameraFieldProps & SizeFieldProps>
+) {
 	return (
 		<AccordionItem value='camera-settings'>
 			<AccordionTrigger icon={<Camera size={16} />}>
 				Camera Settings
 			</AccordionTrigger>
 			<AccordionContent>
-				<CameraFieldSet
-					{...props}
-					dimensions={dimensions}
-					onDimensionsChange={setDimensionsDebounced}
-				/>
+				<CameraFieldSet {...props} />
 			</AccordionContent>
 		</AccordionItem>
 	)
