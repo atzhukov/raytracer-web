@@ -32,16 +32,6 @@ export const github = {
 		{
 			label: 'Left',
 			type: 'sphere',
-			center: [-1.01, 0.12, 2.3],
-			radius: 1,
-			material: {
-				type: 'matte',
-				color: [0.24, 0.16, 0.37],
-			},
-		},
-		{
-			label: 'Right',
-			type: 'sphere',
 			center: [1.01, 0.12, 2.3],
 			radius: 1.0,
 			material: {
@@ -51,18 +41,17 @@ export const github = {
 			},
 		},
 		{
-			label: 'Left Small',
+			label: 'Right',
 			type: 'sphere',
-			center: [-1.6, -0.8, -0.3],
-			radius: 0.6,
+			center: [-1.01, 0.12, 2.3],
+			radius: 1,
 			material: {
-				type: 'metal',
-				color: [0.37, 0.32, 0.16],
-				fuzz: 0.0,
+				type: 'matte',
+				color: [0.24, 0.16, 0.37],
 			},
 		},
 		{
-			label: 'Right Small',
+			label: 'Left Small',
 			type: 'sphere',
 			center: [1.6, -0.8, -0.3],
 			radius: 0.6,
@@ -70,6 +59,17 @@ export const github = {
 				type: 'metal',
 				color: [0.16, 0.16, 0.37],
 				fuzz: 0.95,
+			},
+		},
+		{
+			label: 'Right Small',
+			type: 'sphere',
+			center: [-1.6, -0.8, -0.3],
+			radius: 0.6,
+			material: {
+				type: 'metal',
+				color: [0.37, 0.32, 0.16],
+				fuzz: 0.0,
 			},
 		},
 		{
