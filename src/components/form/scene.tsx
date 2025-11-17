@@ -13,6 +13,7 @@ import {ButtonGroup} from '../ui/button-group'
 import {Dialog} from '../ui/dialog'
 import {DialogTrigger} from '@radix-ui/react-dialog'
 import {EditDialogContent} from '../dialog/object'
+import {useState} from 'react'
 
 export default function SceneObjectsList({
 	scene,
@@ -41,6 +42,7 @@ function SceneObjectCard({
 	object: SceneObjectAny
 	onDelete: () => void
 }>) {
+	const [isEditing, setIsEditing] = useState(false)
 	return (
 		<Card className='py-3'>
 			<CardHeader className='px-3'>
@@ -53,13 +55,19 @@ function SceneObjectCard({
 				</CardDescription>
 				<CardAction className='inline'>
 					<ButtonGroup>
-						<Dialog>
+						<Dialog
+							open={isEditing}
+							onOpenChange={(open) => setIsEditing(open)}
+						>
 							<DialogTrigger asChild>
 								<Button variant='outline' size='icon-sm' aria-label='Submit'>
 									<Pencil />
 								</Button>
 							</DialogTrigger>
-							<EditDialogContent object={object} />
+							<EditDialogContent
+								object={object}
+								onClose={() => setIsEditing(false)}
+							/>
 						</Dialog>
 						<Button
 							variant='outline'

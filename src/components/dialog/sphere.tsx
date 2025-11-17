@@ -1,5 +1,5 @@
 import {config, SceneObject, SceneObjectAny} from '@/lib/objects'
-import {Tag, Move3d, RulerDimensionLine} from 'lucide-react'
+import {Tag, Move3d, RulerDimensionLine, Save} from 'lucide-react'
 import {useCallback, useEffect, useReducer, useState} from 'react'
 import {Button} from '../ui/button'
 import {
@@ -48,6 +48,11 @@ export default function SphereDialogContent({
 			setErrors({label: 'A label is required.'})
 			return
 		}
+		if (editingSphere) {
+			onSave(sphere)
+			return
+		}
+		// Check against unique labels only required for new spheres
 		const sameLabels = scene
 			.map((object) => object.label)
 			.filter((label) => label == sphere.label)
@@ -70,7 +75,9 @@ export default function SphereDialogContent({
 	return (
 		<DialogContent className='max-h-[90vh] overflow-y-scroll'>
 			<DialogHeader>
-				<DialogTitle>Add Sphere</DialogTitle>
+				<DialogTitle>
+					{editingSphere ? 'Edit Sphere' : 'Add Sphere'}
+				</DialogTitle>
 				<DialogDescription className='sr-only'>
 					Configure a sphere to add to the scene.
 				</DialogDescription>
@@ -99,7 +106,8 @@ export default function SphereDialogContent({
 						preventDefault
 						aria-label='Save sphere'
 					>
-						Add
+						<Save />
+						Save
 					</Button>
 				</DialogClose>
 			</DialogFooter>

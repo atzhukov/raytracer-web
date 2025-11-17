@@ -16,7 +16,8 @@ import {useConfigurationStore} from '@/lib/store'
 
 export function EditDialogContent({
 	object,
-}: Readonly<{object: SceneObjectAny}>) {
+	onClose,
+}: Readonly<{object: SceneObjectAny; onClose?: () => void}>) {
 	if (!object.label) {
 		throw new Error('Editing an object requires a label')
 	}
@@ -24,13 +25,15 @@ export function EditDialogContent({
 	const updateSceneObject = useConfigurationStore(
 		(state) => state.updateSceneObject
 	)
+	const saveAndClose = (newObject: SceneObjectAny) => {
+		updateSceneObject(object.label!, newObject)
+		onClose?.()
+	}
+
 	return (
 		<>
 			{object.type == 'sphere' && (
-				<SphereDialogContent
-					editingSphere={object}
-					onSave={(newObject) => updateSceneObject(object.label!, newObject)}
-				/>
+				<SphereDialogContent editingSphere={object} onSave={saveAndClose} />
 			)}
 		</>
 	)
