@@ -147,8 +147,11 @@ function SizeField({dimensions, onDimensionsChange}: Readonly<SizeFieldProps>) {
 		) {
 			return
 		}
+		if (newDimensions.width <= 0 || newDimensions.height <= 0) {
+			return
+		}
 		onDimensionsChange(newDimensions)
-	}, [width, height])
+	}, [onDimensionsChange, width, height])
 
 	return (
 		<FieldSkeleton
