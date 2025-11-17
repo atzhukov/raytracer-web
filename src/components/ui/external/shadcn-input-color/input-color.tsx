@@ -339,7 +339,7 @@ export default function InputColor({
 					</PopoverTrigger>
 					<PopoverContent className='w-auto p-3' align='start'>
 						<div className='color-picker space-y-3'>
-							<div className='relative'>
+							<div className='relative mb-0'>
 								{/* <Button
 									variant='ghost'
 									size='icon'
