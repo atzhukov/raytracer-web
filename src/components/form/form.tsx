@@ -2,8 +2,7 @@
 
 import {Button} from '@/components/ui/button'
 import {FolderGit2, Play} from 'lucide-react'
-import {useCamera} from '@/lib/store'
-import {SyntheticEvent, useState} from 'react'
+import {useState} from 'react'
 import {Switch} from '@/components/ui/switch'
 import {Label} from '@/components/ui/label'
 import {Separator} from '@/components/ui/separator'
@@ -17,10 +16,27 @@ import {
 } from '@/components/ui/card'
 import Link from 'next/link'
 import {ConfigurationSections} from '@/components/form/section'
+import useCamera from '@/lib/hooks/camera'
+import {Dimensions, useConfigurationStore} from '@/lib/store'
+import {useDebouncedCallback} from 'use-debounce'
 
 export default function Form() {
 	const [live, setLive] = useState(true)
+
 	const {camera, updateCamera, flushCamera} = useCamera(live)
+	const scene = useConfigurationStore((state) => state.scene)
+
+	const dimensions = useConfigurationStore((state) => state.dimensions)
+	const setDimensions = useConfigurationStore((state) => state.setDimensions)
+	const setDimensionsDebounced = useDebouncedCallback(
+		(dimensions: Dimensions) => {
+			if (!live) {
+				return
+			}
+			setDimensions(dimensions)
+		},
+		500
+	)
 
 	return (
 		<form className='h-full'>
@@ -35,13 +51,21 @@ export default function Form() {
 					</CardDescription>
 				</CardHeader>
 				<CardContent className='mt-[-16] overflow-y-auto overscroll-y-auto'>
-					<ConfigurationSections camera={camera} onChange={updateCamera} />
+					<ConfigurationSections
+						camera={camera}
+						onCameraChange={updateCamera}
+						dimensions={dimensions}
+						onDimensionsChange={setDimensionsDebounced}
+					/>
 					<Separator />
 				</CardContent>
 				<CardFooter>
 					<div className='w-[100%] flex justify-between'>
 						<LiveSwitch checked={live} onChange={setLive} />
-						<RenderButton disabled={live} onClick={flushCamera} />
+						<RenderButton
+							disabled={live || scene.length == 0}
+							onClick={flushCamera}
+						/>
 					</div>
 				</CardFooter>
 			</Card>
@@ -89,16 +113,13 @@ function RenderButton({
 	disabled,
 	onClick,
 }: Readonly<{disabled: boolean; onClick: () => void}>) {
-	const onClickPreventingDefault = (e: SyntheticEvent) => {
-		e.preventDefault()
-		onClick()
-	}
 	return (
 		<Button
 			variant='outline'
 			size='sm'
 			disabled={disabled}
-			onClick={onClickPreventingDefault}
+			onClick={onClick}
+			preventDefault
 		>
 			<Play /> Render
 		</Button>

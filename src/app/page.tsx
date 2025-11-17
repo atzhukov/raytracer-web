@@ -9,7 +9,7 @@ export default function Home() {
 			</div>
 			<div className='size-full flex-1'>
 				<div className='mb-8 sm:mb-0 grid h-full place-items-center'>
-					<Canvas width={304} height={171} />
+					<Canvas />
 				</div>
 			</div>
 		</div>

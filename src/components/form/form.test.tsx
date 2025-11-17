@@ -1,4 +1,4 @@
-import render, {CameraSpec} from '@/lib/render/render'
+import render, {Camera} from '@/lib/render/render'
 import {useConfigurationStore} from '@/lib/store'
 import {beforeEach, describe, it, vi} from 'vitest'
 // import {render as browserRender} from 'vitest-browser-react'
@@ -11,7 +11,7 @@ vi.mock(import('@/lib/render/render'), () => {
 	}
 })
 
-const cameraSpec: CameraSpec = {
+const cameraSpec: Camera = {
 	fov: 45,
 	source: [0, 0, -1],
 	target: [0, 0, 0],
@@ -22,7 +22,7 @@ const cameraSpec: CameraSpec = {
 describe('Form', () => {
 	beforeEach(() => {
 		useConfigurationStore.setState({
-			cameraSpec: cameraSpec,
+			camera: cameraSpec,
 			scene: [],
 		})
 		vi.clearAllMocks()

@@ -2,8 +2,9 @@ import {expect, describe, it, vi, beforeEach} from 'vitest'
 import {render as browserRender} from 'vitest-browser-react'
 import Canvas from '@/components/canvas/canvas'
 import {page} from 'vitest/browser'
-import render, {CameraSpec, SceneObject} from '@/lib/render/render'
+import render, {Camera} from '@/lib/render/render'
 import {useConfigurationStore} from '@/lib/store'
+import {SceneObject} from '@/lib/objects'
 
 vi.mock(import('@/lib/render/render'), () => {
 	return {
@@ -11,7 +12,7 @@ vi.mock(import('@/lib/render/render'), () => {
 	}
 })
 
-const cameraSpec: CameraSpec = {
+const camera: Camera = {
 	fov: 45,
 	source: [0, 0, -1],
 	target: [0, 0, 0],
@@ -19,7 +20,7 @@ const cameraSpec: CameraSpec = {
 	focusDistance: 1,
 }
 
-const sphere: SceneObject = {
+const sphere: SceneObject<'sphere'> = {
 	label: 'test sphere',
 	type: 'sphere',
 	center: [0, 0, 0],
@@ -34,14 +35,15 @@ const sphere: SceneObject = {
 describe('canvas', () => {
 	beforeEach(() => {
 		useConfigurationStore.setState({
-			cameraSpec: cameraSpec,
+			camera: camera,
 			scene: [],
+			dimensions: {width: 100, height: 50},
 		})
 		vi.clearAllMocks()
 	})
 
 	it('should display empty placeholder if no image is specified', async () => {
-		const result = await browserRender(<Canvas width={100} height={50} />)
+		const result = await browserRender(<Canvas />)
 		const screen = page.elementLocator(result.baseElement)
 
 		await expect
@@ -57,7 +59,7 @@ describe('canvas', () => {
 		const state = useConfigurationStore.getState()
 		state.addSceneObject(sphere)
 
-		const result = await browserRender(<Canvas width={100} height={50} />)
+		const result = await browserRender(<Canvas />)
 		const screen = page.elementLocator(result.baseElement)
 
 		await expect
@@ -75,7 +77,7 @@ describe('canvas', () => {
 		const state = useConfigurationStore.getState()
 		state.addSceneObject(sphere)
 
-		const result = await browserRender(<Canvas width={100} height={50} />)
+		const result = await browserRender(<Canvas />)
 		const screen = page.elementLocator(result.baseElement)
 
 		await expect

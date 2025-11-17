@@ -1,18 +1,18 @@
-import {RaytracerInput} from '@/lib/render/render'
+import {Camera, Scene} from './render/render'
 
 export const github = {
 	camera: {
 		fov: 27.0,
-		source: [0.0, 0.35, 10.0],
-		target: [0.0, -0.35, 0.0],
+		source: [0.0, 0, -10.0],
+		target: [0.0, 0, 0.0],
 		aperture: 0.0,
 		focusDistance: 10.0,
 	},
 	scene: [
 		{
-			label: 'bottom',
+			label: 'Bottom',
 			type: 'sphere',
-			center: [0.0, -99.5, -19],
+			center: [0.0, -99.5, 19],
 			radius: 100,
 			material: {
 				type: 'matte',
@@ -20,7 +20,7 @@ export const github = {
 			},
 		},
 		{
-			label: 'center',
+			label: 'Center',
 			type: 'sphere',
 			center: [0.0, 0.0, 0.0],
 			radius: 1.0,
@@ -30,19 +30,9 @@ export const github = {
 			},
 		},
 		{
-			label: 'left',
+			label: 'Left',
 			type: 'sphere',
-			center: [-1.01, 0.12, -2.3],
-			radius: 1,
-			material: {
-				type: 'matte',
-				color: [0.24, 0.16, 0.37],
-			},
-		},
-		{
-			label: 'right',
-			type: 'sphere',
-			center: [1.01, 0.12, -2.3],
+			center: [1.01, 0.12, 2.3],
 			radius: 1.0,
 			material: {
 				type: 'metal',
@@ -51,20 +41,19 @@ export const github = {
 			},
 		},
 		{
-			label: 'left small',
+			label: 'Right',
 			type: 'sphere',
-			center: [-1.6, -0.8, 0.3],
-			radius: 0.6,
+			center: [-1.01, 0.12, 2.3],
+			radius: 1,
 			material: {
-				type: 'metal',
-				color: [0.37, 0.32, 0.16],
-				fuzz: 0.0,
+				type: 'matte',
+				color: [0.24, 0.16, 0.37],
 			},
 		},
 		{
-			label: 'right small',
+			label: 'Left Small',
 			type: 'sphere',
-			center: [1.6, -0.8, 0.3],
+			center: [1.6, -0.8, -0.3],
 			radius: 0.6,
 			material: {
 				type: 'metal',
@@ -73,9 +62,20 @@ export const github = {
 			},
 		},
 		{
-			label: 'front',
+			label: 'Right Small',
 			type: 'sphere',
-			center: [0, -1.05, 1.6],
+			center: [-1.6, -0.8, -0.3],
+			radius: 0.6,
+			material: {
+				type: 'metal',
+				color: [0.37, 0.32, 0.16],
+				fuzz: 0.0,
+			},
+		},
+		{
+			label: 'Front',
+			type: 'sphere',
+			center: [0, -1.05, -1.6],
 			radius: 0.6,
 			material: {
 				type: 'matte',
@@ -83,4 +83,4 @@ export const github = {
 			},
 		},
 	],
-} satisfies RaytracerInput
+} satisfies {camera: Camera; scene: Scene}

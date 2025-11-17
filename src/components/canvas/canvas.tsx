@@ -7,19 +7,17 @@ import {
 	EmptyMedia,
 	EmptyTitle,
 } from '@/components/ui/empty'
-import render, {RaytracerInput} from '@/lib/render/render'
+import render from '@/lib/render/render'
 import {Loader, Settings, TriangleAlert} from 'lucide-react'
 import {JSX, useEffect, useReducer, useRef} from 'react'
 import progress from './state'
-import useConfiguration from '@/lib/store'
+import {useConfigurationStore} from '@/lib/store'
 
-type CanvasProps = {
-	width: number
-	height: number
-}
+export default function Canvas() {
+	const camera = useConfigurationStore((state) => state.camera)
+	const scene = useConfigurationStore((state) => state.scene)
+	const dimensions = useConfigurationStore((state) => state.dimensions)
 
-export default function Canvas(props: Readonly<CanvasProps>) {
-	const configuration = useConfiguration()
 	const canvasRef = useRef<HTMLCanvasElement>(null)
 
 	const [state, transition] = useReducer(progress, {
@@ -31,12 +29,7 @@ export default function Canvas(props: Readonly<CanvasProps>) {
 	// Re-render the image and set state.imageData when the props change
 	useEffect(() => {
 		async function getImageData() {
-			const input: RaytracerInput = {
-				camera: configuration.camera,
-				scene: configuration.scene,
-			} // eslint
-
-			if (input.scene.length == 0) {
+			if (scene.length == 0) {
 				transition({to: 'empty'})
 				return
 			}
@@ -45,9 +38,10 @@ export default function Canvas(props: Readonly<CanvasProps>) {
 				transition({to: 'working'})
 				const ratio = window.devicePixelRatio || 1
 				const imageData = await render(
-					input,
-					props.width * ratio,
-					props.height * ratio
+					camera,
+					scene,
+					dimensions.width * ratio,
+					dimensions.height * ratio
 				)
 				transition({to: 'done', imageData})
 			} catch (error) {
@@ -56,7 +50,7 @@ export default function Canvas(props: Readonly<CanvasProps>) {
 			}
 		}
 		getImageData()
-	}, [configuration.camera, configuration.scene, props.width, props.height])
+	}, [camera, scene, dimensions.width, dimensions.height])
 
 	// Fill canvas when state.imageData changes
 	useEffect(() => {
@@ -73,10 +67,10 @@ export default function Canvas(props: Readonly<CanvasProps>) {
 
 		// Scale for retina displays
 		const ratio = window.devicePixelRatio || 1
-		canvas.style.width = props.width + 'px'
-		canvas.style.height = props.height + 'px'
-		canvas.width = props.width * ratio
-		canvas.height = props.height * ratio
+		canvas.style.width = dimensions.width + 'px'
+		canvas.style.height = dimensions.height + 'px'
+		canvas.width = dimensions.width * ratio
+		canvas.height = dimensions.height * ratio
 
 		try {
 			context.scale(ratio, ratio)
@@ -84,7 +78,7 @@ export default function Canvas(props: Readonly<CanvasProps>) {
 		} catch (error) {
 			transition({to: 'error', message: errorMessage(error)})
 		}
-	}, [state.imageData, props.width, props.height])
+	}, [state.imageData, dimensions.width, dimensions.height])
 
 	return (
 		<>
