@@ -38,7 +38,10 @@ export default function Form() {
 					</CardDescription>
 				</CardHeader>
 				<CardContent className='mt-[-16] overflow-y-auto overscroll-y-auto'>
-					<ConfigurationSections camera={camera} onChange={updateCamera} />
+					<ConfigurationSections
+						camera={camera}
+						onCameraChange={updateCamera}
+					/>
 					<Separator />
 				</CardContent>
 				<CardFooter>

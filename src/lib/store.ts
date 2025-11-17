@@ -4,7 +4,7 @@ import {github} from './presets'
 import {SceneObjectAny} from './objects'
 import equal from 'fast-deep-equal'
 
-type Dimensions = {
+export type Dimensions = {
 	width: number
 	height: number
 }

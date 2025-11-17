@@ -1,20 +1,28 @@
 import {Camera} from '@/lib/render/render'
 import {FieldGroup, FieldSet} from '@/components/ui/field'
-import {Aperture, Focus, Move3d, ScanEye} from 'lucide-react'
+import {Aperture, Focus, Move3d, Scaling, ScanEye} from 'lucide-react'
 import SliderWithDisplay from '@/components/ui/wrap/slider-display'
 import {FieldSkeleton} from '../ui/wrap/field'
 import CoordinateInput from '../ui/wrap/coordinateInput'
-import {useCallback} from 'react'
+import {useCallback, useEffect, useState} from 'react'
 import {Vec3} from '@/lib/utils'
+import {Input} from '../ui/input'
+import {Dimensions} from '@/lib/store'
 
 const iconSize = '16'
 
 export type CameraFieldProps = {
 	camera: Camera
-	onChange: (changes: Partial<Camera>) => void
+	onCameraChange: (changes: Partial<Camera>) => void
+}
+export type SizeFieldProps = {
+	dimensions: Dimensions
+	onDimensionsChange: (dimensions: Dimensions) => void
 }
 
-export default function CameraFieldSet(props: Readonly<CameraFieldProps>) {
+export default function CameraFieldSet(
+	props: Readonly<CameraFieldProps & SizeFieldProps>
+) {
 	return (
 		<FieldSet>
 			<FieldGroup>
@@ -22,12 +30,16 @@ export default function CameraFieldSet(props: Readonly<CameraFieldProps>) {
 				<ApertureField {...props} />
 				<FocusDistanceField {...props} />
 				<SourceField {...props} />
+				<SizeField {...props} />
 			</FieldGroup>
 		</FieldSet>
 	)
 }
 
-function FieldOfViewField({camera, onChange}: Readonly<CameraFieldProps>) {
+function FieldOfViewField({
+	camera,
+	onCameraChange: onChange,
+}: Readonly<CameraFieldProps>) {
 	const id = 'fov'
 	return (
 		<FieldSkeleton
@@ -50,7 +62,10 @@ function FieldOfViewField({camera, onChange}: Readonly<CameraFieldProps>) {
 	)
 }
 
-function ApertureField({camera, onChange}: Readonly<CameraFieldProps>) {
+function ApertureField({
+	camera,
+	onCameraChange: onChange,
+}: Readonly<CameraFieldProps>) {
 	const id = 'aperture'
 	return (
 		<FieldSkeleton
@@ -72,7 +87,10 @@ function ApertureField({camera, onChange}: Readonly<CameraFieldProps>) {
 	)
 }
 
-function FocusDistanceField({camera, onChange}: Readonly<CameraFieldProps>) {
+function FocusDistanceField({
+	camera,
+	onCameraChange: onChange,
+}: Readonly<CameraFieldProps>) {
 	const id = 'focus-distance'
 	return (
 		<FieldSkeleton
@@ -94,7 +112,10 @@ function FocusDistanceField({camera, onChange}: Readonly<CameraFieldProps>) {
 	)
 }
 
-function SourceField({camera, onChange}: Readonly<CameraFieldProps>) {
+function SourceField({
+	camera,
+	onCameraChange: onChange,
+}: Readonly<CameraFieldProps>) {
 	const onChangeMemoized = useCallback(
 		(v: Vec3) => onChange({source: v}),
 		[onChange]
@@ -111,19 +132,43 @@ function SourceField({camera, onChange}: Readonly<CameraFieldProps>) {
 	)
 }
 
-function SizeField({camera, onChange}: Readonly<CameraFieldProps>) {
-	const onChangeMemoized = useCallback(
-		(v: Vec3) => onChange({source: v}),
-		[onChange]
-	)
+function SizeField({dimensions, onDimensionsChange}: Readonly<SizeFieldProps>) {
+	const [width, setWidth] = useState(dimensions.width.toString())
+	const [height, setHeight] = useState(dimensions.height.toString())
+
+	useEffect(() => {
+		const newDimensions = {
+			width: Number.parseInt(width),
+			height: Number.parseInt(height),
+		}
+		if (
+			Number.isNaN(newDimensions.width) ||
+			Number.isNaN(newDimensions.height)
+		) {
+			return
+		}
+		onDimensionsChange(newDimensions)
+	}, [width, height])
+
 	return (
 		<FieldSkeleton
-			id='source'
-			icon={<Move3d size={iconSize} />}
-			label='Location'
-			description='The point where the camera is located.'
+			id='size'
+			icon={<Scaling size={iconSize} />}
+			label='Size'
+			description='The size of the resulting image. Affects performance.'
 		>
-			<CoordinateInput values={camera.source} onChange={onChangeMemoized} />
+			<div className='flex gap-2'>
+				<Input
+					type='number'
+					value={width}
+					onChange={(e) => setWidth(e.target.value)}
+				/>
+				<Input
+					type='number'
+					value={height}
+					onChange={(e) => setHeight(e.target.value)}
+				/>
+			</div>
 		</FieldSkeleton>
 	)
 }
