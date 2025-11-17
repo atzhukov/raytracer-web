@@ -44,10 +44,12 @@ function CoordinateInputField({
 }>) {
 	const [valueString, setValueString] = useState(value.toString())
 	useEffect(() => {
-		if (!valueString) {
+		const newValue = Number.parseFloat(valueString)
+		if (Number.isNaN(newValue)) {
 			onChange(0)
+		} else {
+			onChange(newValue)
 		}
-		onChange(Number.parseFloat(valueString))
 	}, [onChange, valueString])
 
 	const upperLabel = label.toUpperCase()
