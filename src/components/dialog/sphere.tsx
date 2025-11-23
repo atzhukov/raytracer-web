@@ -24,7 +24,7 @@ export default function SphereDialogContent({
 	editingSphere?: SceneObject<'sphere'>
 	onSave: (object: SceneObjectAny) => void
 }>) {
-	const scene = useConfigurationStore((state) => state.scene)
+	const {scene} = useConfigurationStore((state) => state.queued)
 
 	// Initial sphere is either passed into the component or defined in the config.
 	const sphereInitial = editingSphere ?? config('sphere').initialValue()

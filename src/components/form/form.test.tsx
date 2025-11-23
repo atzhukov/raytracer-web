@@ -11,7 +11,7 @@ vi.mock(import('@/lib/render/render'), () => {
 	}
 })
 
-const cameraSpec: Camera = {
+const camera: Camera = {
 	fov: 45,
 	source: [0, 0, -1],
 	target: [0, 0, 0],
@@ -19,11 +19,18 @@ const cameraSpec: Camera = {
 	focusDistance: 1,
 }
 
+const initial = {
+	camera: camera,
+	scene: [],
+	dimensions: {width: 100, height: 50},
+}
+
 describe('Form', () => {
 	beforeEach(() => {
 		useConfigurationStore.setState({
-			camera: cameraSpec,
-			scene: [],
+			queued: initial,
+			committed: initial,
+			live: false,
 		})
 		vi.clearAllMocks()
 	})

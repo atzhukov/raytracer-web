@@ -14,9 +14,9 @@ import progress from './state'
 import {useConfigurationStore} from '@/lib/store'
 
 export default function Canvas() {
-	const camera = useConfigurationStore((state) => state.camera)
-	const scene = useConfigurationStore((state) => state.scene)
-	const dimensions = useConfigurationStore((state) => state.dimensions)
+	const {camera, scene, dimensions} = useConfigurationStore(
+		(state) => state.committed
+	)
 
 	const canvasRef = useRef<HTMLCanvasElement>(null)
 

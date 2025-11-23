@@ -32,12 +32,18 @@ const sphere: SceneObject<'sphere'> = {
 	},
 }
 
+const initial = {
+	camera: camera,
+	scene: [],
+	dimensions: {width: 100, height: 50},
+}
+
 describe('canvas', () => {
 	beforeEach(() => {
 		useConfigurationStore.setState({
-			camera: camera,
-			scene: [],
-			dimensions: {width: 100, height: 50},
+			queued: initial,
+			committed: initial,
+			live: false,
 		})
 		vi.clearAllMocks()
 	})
@@ -58,6 +64,7 @@ describe('canvas', () => {
 
 		const state = useConfigurationStore.getState()
 		state.addSceneObject(sphere)
+		state.commit()
 
 		const result = await browserRender(<Canvas />)
 		const screen = page.elementLocator(result.baseElement)
@@ -76,6 +83,7 @@ describe('canvas', () => {
 
 		const state = useConfigurationStore.getState()
 		state.addSceneObject(sphere)
+		state.commit()
 
 		const result = await browserRender(<Canvas />)
 		const screen = page.elementLocator(result.baseElement)

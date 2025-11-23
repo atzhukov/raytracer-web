@@ -1,45 +1,40 @@
-import {Camera} from '@/lib/render/render'
 import {FieldGroup, FieldSet} from '@/components/ui/field'
 import {Aperture, Focus, Move3d, Scaling, ScanEye} from 'lucide-react'
 import SliderWithDisplay from '@/components/ui/wrap/slider-display'
 import {FieldSkeleton} from '../ui/wrap/field'
 import CoordinateInput from '../ui/wrap/coordinateInput'
-import {useCallback, useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import {Vec3} from '@/lib/utils'
 import {Input} from '../ui/input'
-import {Dimensions} from '@/lib/store'
+import {useConfigurationStore} from '@/lib/store'
+import {useShallow} from 'zustand/shallow'
+import useCommit from '@/lib/hooks/use-commit'
 
 const iconSize = '16'
 
-export type CameraFieldProps = {
-	camera: Camera
-	onCameraChange: (changes: Partial<Camera>) => void
-}
-export type SizeFieldProps = {
-	dimensions: Dimensions
-	onDimensionsChange: (dimensions: Dimensions) => void
-}
-
-export default function CameraFieldSet(
-	props: Readonly<CameraFieldProps & SizeFieldProps>
-) {
+export default function CameraFieldSet() {
 	return (
 		<FieldSet>
 			<FieldGroup>
-				<FieldOfViewField {...props} />
-				<ApertureField {...props} />
-				<FocusDistanceField {...props} />
-				<SourceField {...props} />
-				<SizeField {...props} />
+				<FieldOfViewField />
+				<ApertureField />
+				<FocusDistanceField />
+				<SourceField />
+				<SizeField />
 			</FieldGroup>
 		</FieldSet>
 	)
 }
 
-function FieldOfViewField({
-	camera,
-	onCameraChange: onChange,
-}: Readonly<CameraFieldProps>) {
+function FieldOfViewField() {
+	const {fov, updateCamera} = useConfigurationStore(
+		useShallow((state) => ({
+			fov: state.queued.camera.fov,
+			updateCamera: state.updateCamera,
+		}))
+	)
+	const commitFov = useCommit((fov: number) => updateCamera({fov}))
+
 	const id = 'fov'
 	return (
 		<FieldSkeleton
@@ -50,9 +45,9 @@ function FieldOfViewField({
 		>
 			<SliderWithDisplay
 				id={id}
-				value={camera.fov}
+				value={fov}
 				displayValue={(v) => `${v}°`}
-				onChange={(v) => onChange({fov: v})}
+				onChange={commitFov}
 				min={1}
 				max={100}
 				step={1}
@@ -62,10 +57,17 @@ function FieldOfViewField({
 	)
 }
 
-function ApertureField({
-	camera,
-	onCameraChange: onChange,
-}: Readonly<CameraFieldProps>) {
+function ApertureField() {
+	const {aperture, updateCamera} = useConfigurationStore(
+		useShallow((state) => ({
+			aperture: state.queued.camera.aperture,
+			updateCamera: state.updateCamera,
+		}))
+	)
+	const commitAperture = useCommit((aperture: number) =>
+		updateCamera({aperture})
+	)
+
 	const id = 'aperture'
 	return (
 		<FieldSkeleton
@@ -76,8 +78,8 @@ function ApertureField({
 		>
 			<SliderWithDisplay
 				id={id}
-				value={camera.aperture}
-				onChange={(v) => onChange({aperture: v})}
+				value={aperture}
+				onChange={commitAperture}
 				min={0}
 				max={50}
 				step={0.1}
@@ -87,10 +89,17 @@ function ApertureField({
 	)
 }
 
-function FocusDistanceField({
-	camera,
-	onCameraChange: onChange,
-}: Readonly<CameraFieldProps>) {
+function FocusDistanceField() {
+	const {focusDistance, updateCamera} = useConfigurationStore(
+		useShallow((state) => ({
+			focusDistance: state.queued.camera.focusDistance,
+			updateCamera: state.updateCamera,
+		}))
+	)
+	const commitFocusDistance = useCommit((focusDistance: number) =>
+		updateCamera({focusDistance})
+	)
+
 	const id = 'focus-distance'
 	return (
 		<FieldSkeleton
@@ -101,8 +110,8 @@ function FocusDistanceField({
 		>
 			<SliderWithDisplay
 				id={id}
-				value={camera.focusDistance}
-				onChange={(v) => onChange({focusDistance: v})}
+				value={focusDistance}
+				onChange={commitFocusDistance}
 				min={0.1}
 				max={50}
 				step={0.1}
@@ -112,14 +121,15 @@ function FocusDistanceField({
 	)
 }
 
-function SourceField({
-	camera,
-	onCameraChange: onChange,
-}: Readonly<CameraFieldProps>) {
-	const onChangeMemoized = useCallback(
-		(v: Vec3) => onChange({source: v}),
-		[onChange]
+function SourceField() {
+	const {source, updateCamera} = useConfigurationStore(
+		useShallow((state) => ({
+			source: state.queued.camera.source,
+			updateCamera: state.updateCamera,
+		}))
 	)
+	const commitSource = useCommit((source: Vec3) => updateCamera({source}))
+
 	return (
 		<FieldSkeleton
 			id='source'
@@ -127,12 +137,17 @@ function SourceField({
 			label='Location'
 			description='The point where the camera is located.'
 		>
-			<CoordinateInput values={camera.source} onChange={onChangeMemoized} />
+			<CoordinateInput values={source} onChange={commitSource} />
 		</FieldSkeleton>
 	)
 }
 
-function SizeField({dimensions, onDimensionsChange}: Readonly<SizeFieldProps>) {
+function SizeField() {
+	const [dimensions, setDimensions] = useConfigurationStore(
+		useShallow((state) => [state.queued.dimensions, state.setDimensions])
+	)
+	const commitDimensions = useCommit(setDimensions)
+
 	const [width, setWidth] = useState(dimensions.width.toString())
 	const [height, setHeight] = useState(dimensions.height.toString())
 
@@ -150,8 +165,8 @@ function SizeField({dimensions, onDimensionsChange}: Readonly<SizeFieldProps>) {
 		if (newDimensions.width <= 0 || newDimensions.height <= 0) {
 			return
 		}
-		onDimensionsChange(newDimensions)
-	}, [onDimensionsChange, width, height])
+		commitDimensions(newDimensions)
+	}, [commitDimensions, width, height])
 
 	return (
 		<FieldSkeleton

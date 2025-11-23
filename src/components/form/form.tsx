@@ -2,7 +2,6 @@
 
 import {Button} from '@/components/ui/button'
 import {FolderGit2, Play} from 'lucide-react'
-import {useState} from 'react'
 import {Switch} from '@/components/ui/switch'
 import {Label} from '@/components/ui/label'
 import {Separator} from '@/components/ui/separator'
@@ -16,28 +15,10 @@ import {
 } from '@/components/ui/card'
 import Link from 'next/link'
 import {ConfigurationSections} from '@/components/form/section'
-import useCamera from '@/lib/hooks/camera'
-import {Dimensions, useConfigurationStore} from '@/lib/store'
-import {useDebouncedCallback} from 'use-debounce'
+import {useConfigurationStore} from '@/lib/store'
+import {useShallow} from 'zustand/shallow'
 
 export default function Form() {
-	const [live, setLive] = useState(true)
-
-	const {camera, updateCamera, flushCamera} = useCamera(live)
-	const scene = useConfigurationStore((state) => state.scene)
-
-	const dimensions = useConfigurationStore((state) => state.dimensions)
-	const setDimensions = useConfigurationStore((state) => state.setDimensions)
-	const setDimensionsDebounced = useDebouncedCallback(
-		(dimensions: Dimensions) => {
-			if (!live) {
-				return
-			}
-			setDimensions(dimensions)
-		},
-		500
-	)
-
 	return (
 		<form className='h-full'>
 			<Card className='h-full'>
@@ -51,21 +32,13 @@ export default function Form() {
 					</CardDescription>
 				</CardHeader>
 				<CardContent className='mt-[-16] overflow-y-auto overscroll-y-auto'>
-					<ConfigurationSections
-						camera={camera}
-						onCameraChange={updateCamera}
-						dimensions={dimensions}
-						onDimensionsChange={setDimensionsDebounced}
-					/>
+					<ConfigurationSections />
 					<Separator />
 				</CardContent>
 				<CardFooter>
 					<div className='w-[100%] flex justify-between'>
-						<LiveSwitch checked={live} onChange={setLive} />
-						<RenderButton
-							disabled={live || scene.length == 0}
-							onClick={flushCamera}
-						/>
+						<LiveSwitch />
+						<RenderButton />
 					</div>
 				</CardFooter>
 			</Card>
@@ -89,16 +62,16 @@ function Title() {
 	)
 }
 
-function LiveSwitch({
-	checked,
-	onChange,
-}: Readonly<{checked: boolean; onChange: (value: boolean) => void}>) {
+function LiveSwitch() {
+	const [live, setLive] = useConfigurationStore(
+		useShallow((state) => [state.live, state.setLive])
+	)
 	return (
 		<div className='flex items-center gap-2'>
 			<Switch
 				id='live'
-				checked={checked}
-				onCheckedChange={onChange}
+				checked={live}
+				onCheckedChange={setLive}
 				aria-label='Start ray tracing immediately'
 				role='switch'
 			/>
@@ -109,16 +82,19 @@ function LiveSwitch({
 	)
 }
 
-function RenderButton({
-	disabled,
-	onClick,
-}: Readonly<{disabled: boolean; onClick: () => void}>) {
+function RenderButton() {
+	const {disabled, commit} = useConfigurationStore(
+		useShallow((state) => ({
+			disabled: state.live || state.queued.scene.length == 0,
+			commit: state.commit,
+		}))
+	)
 	return (
 		<Button
 			variant='outline'
 			size='sm'
 			disabled={disabled}
-			onClick={onClick}
+			onClick={commit}
 			preventDefault
 		>
 			<Play /> Render

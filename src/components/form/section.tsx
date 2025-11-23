@@ -5,40 +5,36 @@ import {
 	AccordionItem,
 	AccordionTrigger,
 } from '@/components/ui/accordion'
-import CameraFieldSet, {CameraFieldProps, SizeFieldProps} from './camera'
+import CameraFieldSet from './camera'
 import {Button} from '@/components/ui/button'
 import SceneObjectsList from './scene'
 import {AddObjectDropdownMenu} from '../dialog/object'
 import {useConfigurationStore} from '@/lib/store'
 
-export function ConfigurationSections(
-	props: Readonly<CameraFieldProps & SizeFieldProps>
-) {
+export function ConfigurationSections() {
 	return (
 		<Accordion type='single' defaultValue='scene' collapsible>
-			<CameraSection {...props} />
+			<CameraSection />
 			<SceneSection />
 		</Accordion>
 	)
 }
 
-export function CameraSection(
-	props: Readonly<CameraFieldProps & SizeFieldProps>
-) {
+export function CameraSection() {
 	return (
 		<AccordionItem value='camera-settings'>
 			<AccordionTrigger icon={<Camera size={16} />}>
 				Camera Settings
 			</AccordionTrigger>
 			<AccordionContent>
-				<CameraFieldSet {...props} />
+				<CameraFieldSet />
 			</AccordionContent>
 		</AccordionItem>
 	)
 }
 
 export function SceneSection() {
-	const scene = useConfigurationStore((state) => state.scene)
+	const {scene} = useConfigurationStore((state) => state.queued)
 	const removeSceneObject = useConfigurationStore(
 		(state) => state.removeSceneObject
 	)

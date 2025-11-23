@@ -4,76 +4,96 @@ import {github} from './presets'
 import {SceneObjectAny} from './objects'
 import equal from 'fast-deep-equal'
 
+export type CurrentState = {
+	camera: Camera
+	scene: Scene
+	dimensions: Dimensions
+}
 export type Dimensions = {
 	width: number
 	height: number
 }
 
-interface ConfigurationStore {
-	camera: Camera
-	updateCamera: (changes: Partial<Camera>) => void
+export interface ConfigurationStore {
+	queued: CurrentState
+	committed: CurrentState
+	live: boolean
 
-	scene: Scene
+	commit: () => void
+	setLive: (live: boolean) => void
+
+	updateCamera: (changes: Partial<Camera>) => void
 	addSceneObject: (object: SceneObjectAny) => void
 	updateSceneObject: (label: string, newObject: SceneObjectAny) => void
 	removeSceneObject: (object: SceneObjectAny) => void
 	clearScene: () => void
-
-	dimensions: Dimensions
 	setDimensions: (dimensions: Dimensions) => void
 }
 
-export const useConfigurationStore = create<ConfigurationStore>((set) => ({
+const initialState = {
 	camera: github.camera,
-	updateCamera: (changes) =>
+	scene: github.scene,
+	dimensions: {width: 300, height: 300},
+}
+
+export const useConfigurationStore = create<ConfigurationStore>()((set) => ({
+	queued: {...initialState},
+	committed: {...initialState},
+	live: true,
+
+	commit: () =>
 		set((state) => {
-			const newCamera = {...state.camera, ...changes}
-			// Refuse update if new state is unchanged to save some re-renders
-			if (equal(state.camera, newCamera)) {
+			if (equal(state.queued, state.committed)) {
 				return state
 			}
 			return {
 				...state,
-				camera: newCamera,
-				scene: state.scene,
+				committed: state.queued,
 			}
 		}),
 
-	scene: github.scene,
+	setLive: (live) => set((state) => ({...state, live})),
+
+	updateCamera: (changes) =>
+		set((state) => ({
+			...state,
+			queued: {...state.queued, camera: {...state.queued.camera, ...changes}},
+		})),
+
 	addSceneObject: (object) =>
 		set((state) => ({
 			...state,
-			camera: state.camera,
-			scene: [...state.scene, object],
+			queued: {...state.queued, scene: [...state.queued.scene, object]},
 		})),
+
 	updateSceneObject: (label, newObject) =>
 		set((state) => {
-			const newScene = [...state.scene]
-			const index = newScene.findIndex((object) => object.label == label)
-			newScene[index] = newObject
+			const scene = state.queued.scene.map((object) =>
+				object.label == label ? newObject : object
+			)
 			return {
 				...state,
-				camera: state.camera,
-				scene: newScene,
+				queued: {...state.queued, scene},
 			}
 		}),
+
 	removeSceneObject: (object) =>
-		set((state) => ({
-			...state,
-			camera: state.camera,
-			scene: state.scene.filter((currentObject) => currentObject != object),
-		})),
+		set((state) => {
+			const scene = state.queued.scene.filter(
+				(currentObject) => currentObject != object
+			)
+			return {...state, queued: {...state.queued, scene}}
+		}),
+
 	clearScene: () =>
 		set((state) => ({
 			...state,
-			camera: state.camera,
-			scene: [],
+			queued: {...state.queued, scene: []},
 		})),
 
-	dimensions: {width: 300, height: 300},
 	setDimensions: (dimensions) =>
 		set((state) => ({
 			...state,
-			dimensions,
+			queued: {...state.queued, dimensions},
 		})),
 }))
